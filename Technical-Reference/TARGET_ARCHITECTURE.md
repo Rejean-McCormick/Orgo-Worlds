@@ -155,11 +155,15 @@ Each external system receives its own explicit port/adapter and Anti-Corruption 
 
 ```text
 Orgo core
-  ↓ port
-KristalPort
-  ↓ adapter + mapper
-Kristal
+  ↓ owner transaction + outbox
+Interaction Kernel boundary
+  ↓
+Da’at
+  ↓
+Kristal artifact
 ```
+
+Kristal publication is post-commit and reference-oriented. IK does not store the artifact and Da’at does not become the owner of Orgo workflow state. Orgo retains only the operational request state and opaque artifact references/receipts required for correlation.
 
 The same rule applies to Konnaxion, SemantiK Architect and kOA-facing operational integrations.
 
@@ -266,7 +270,7 @@ external/channel adapter
 receipt / retry / terminal failure
 ```
 
-Do not perform a remote side effect between an operational database mutation and its commit.
+Do not perform a remote side effect between an operational database mutation and its commit. Cross-system work begins only after the Orgo owner transaction commits; there is no distributed transaction across Orgo, IK, Da’at, Kristal or Konnaxion.
 
 ## 6. OutboxMessage and IntegrationOperation are different concepts
 
@@ -391,6 +395,18 @@ read projections
 ```
 
 A separate warehouse, ORM or broker is an implementation option, not an architectural requirement.
+
+### Operational state, knowledge artifacts and runtime materializations
+
+```text
+Orgo operational state      mutable / transactional / Orgo-owned
+        ↓ immutable export
+Kristal Exchange/artifact   epistemic / content-addressed
+        ↓ deterministic build
+Runtime materialization     derived / replaceable / read-oriented
+```
+
+Only the first plane is authoritative for Orgo business mutations. Kristal artifacts may be linked through `ArtifactLink`; Runtime Packs or local indexes may be cached/rebuilt and are not independent write authorities.
 
 ## 11. Runtime/deployment shape
 

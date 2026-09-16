@@ -6,7 +6,9 @@
 
 ## 1. Architecture
 
-Orgo remains the owner of Signal, Workflow, Case, Task, IntegrationOperation and delivery state. Interaction Kernel is a boundary protocol; it does not introduce a parallel lifecycle or a second outbox.
+Orgo remains the owner of Signal, Workflow, Case, Task, IntegrationOperation and delivery state. Interaction Kernel is a boundary protocol; it does not introduce a parallel lifecycle, a second outbox, a shared database or an artifact store.
+
+All outbound cross-system work is post-commit. Orgo never opens a distributed transaction with Konnaxion, Da’at or Kristal; idempotency, receipts and reconciliation provide cross-system reliability.
 
 ```text
 Konnaxion -- governance.decision.execute --> Orgo IK boundary
@@ -138,6 +140,17 @@ Supported initial operations:
 - `revision` → `kristal.revision.request/1.0.0`.
 
 The old provider `kristal` remains only as a migration compatibility path for the existing direct `validate` bridge.
+
+### Kristal output ownership
+
+The outbound request carries a stable snapshot/export and/or artifact references. Da’at maps that input into Kristal-native epistemic structures. A resulting Kristal artifact remains Kristal-owned and returns to Orgo as an opaque reference/receipt; canonical Kristal payloads are not copied into Case/Task state.
+
+```text
+Orgo DB → export/ref → IK → Da’at → Kristal
+Orgo DB ← ArtifactRef/receipt ───────────────┘
+```
+
+Runtime Packs are derived query/runtime materializations. They may be activated by the deployment owner but do not become authoritative Orgo state.
 
 ## 9. Configuration
 

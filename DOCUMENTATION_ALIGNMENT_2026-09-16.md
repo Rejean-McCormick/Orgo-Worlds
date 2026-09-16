@@ -10,6 +10,10 @@ Current snapshot: IK boundary is documented as implemented; legacy bridge remain
 
 ## Changes applied
 
+- made the operational DB → export → IK → Da’at → Kristal → ArtifactRef ownership chain explicit;
+- clarified that Runtime Packs/materialized query stores are derived and non-authoritative for Orgo workflow state;
+- explicitly prohibited distributed transactions and bidirectional database synchronization across system ownership boundaries;
+
 - clarified Orgo ownership versus Konnaxion, Kristal/Da’at and kOA-Linux;
 - aligned Konnaxion handoff with `governance.decision.execute/1.0.0`;
 - aligned outbound impact publication with `accountability.impact.publish/1.0.0`;

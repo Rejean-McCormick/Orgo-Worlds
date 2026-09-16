@@ -15,3 +15,12 @@ This update integrates Orgo Worlds with Interaction Kernel `ik/1.1` while preser
 - unit and integration test coverage added to the existing suites.
 
 See `docs/Technical-Reference/INTERACTION_KERNEL.md`.
+
+## Ownership invariant
+
+```text
+Orgo operational DB → immutable export/ref → Interaction Kernel → Da’at → Kristal
+Orgo operational DB ←──────────── ArtifactRef / receipt ───────────────┘
+```
+
+Orgo remains authoritative for mutable workflow state; Kristal remains authoritative for its epistemic artifacts. Interaction Kernel is transport/contract infrastructure, not storage. Runtime Packs are derived materializations. No distributed transaction spans these owners; cross-system reliability uses the existing outbox, idempotency, receipts and reconciliation.

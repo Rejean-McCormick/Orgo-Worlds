@@ -29,6 +29,7 @@ Orgo owns **workflow state, business authorization and its business UI**. It can
 
 - `Organization` is the tenant boundary.
 - `Work` is the central operational bounded context; it owns canonical Case/Task mutations.
+- Operational state commits locally before IK delivery; Kristal publication uses immutable exports/references through Da’at and returns opaque artifact references/receipts.
 - `Task` is the canonical executable unit of work.
 - `Case` is the durable situation/context and primary operational workspace.
 - `Signal` is a first-class durable accepted input/evidence object; this snapshot documents its reuse by the IK admission path.

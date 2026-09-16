@@ -82,6 +82,22 @@ New Kristal v5 workflows use provider `daat` according to `INTERACTION_KERNEL.md
 
 The old direct provider `kristal` / `validate` path is compatibility-only during migration.
 
+The ownership invariant is:
+
+```text
+Orgo operational DB
+  ↓ immutable export/snapshot after commit
+Interaction Kernel
+  ↓
+Da’at
+  ↓
+Kristal Exchange / artifact
+  ↓
+ArtifactRef / receipt retained by Orgo
+```
+
+Orgo does not write Kristal's canonical store, and Kristal/Da’at do not mutate Orgo Case/Task state. Interaction Kernel transports the interaction and references; it is not an artifact store. Runtime Packs and other query materializations are derived from Kristal artifacts and never become an Orgo write authority.
+
 Orgo preserves these distinctions:
 
 ```text
@@ -149,6 +165,8 @@ owner business transaction
 ```
 
 `OutboxMessage` is delivery infrastructure. `IntegrationOperation` is Orgo-owned operational state for a request to an external system. Neither replaces the external system's authoritative state.
+
+The Orgo owner transaction commits before remote delivery. Reliability across systems is achieved with idempotent delivery, receipts and reconciliation; no distributed transaction or bidirectional database synchronization spans Orgo, Interaction Kernel, Da’at, Kristal or Konnaxion.
 
 External operation status must not be folded into Task/Case lifecycle by implication.
 

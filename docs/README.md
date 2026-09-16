@@ -1,3 +1,5 @@
+> **Documentation source-of-truth notice (2026-09-16):** In this Orgo_Worlds delivery, the repository-root `Technical-Reference/` tree is the canonical current technical documentation. The `docs/Technical-Reference/` tree is retained as historical/inherited material and must not override the root Interaction Kernel, Da’at/Kristal or ownership documentation.
+
 > Current delivery: [Implementation status](Technical-Reference/IMPLEMENTATION_STATUS.md), [adopted decisions](Technical-Reference/IMPLEMENTATION_DECISIONS.md), [implemented API](Technical-Reference/API_IMPLEMENTED.md).
 
 # Orgo — Documentation

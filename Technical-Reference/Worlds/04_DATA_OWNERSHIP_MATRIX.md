@@ -14,3 +14,6 @@
 | WorkEvent, IdempotencyRecord, OutboxMessage | World + release | audit technique / exact-once logique |
 | Integration configuration | organisation | connecteurs partagés |
 | IntegrationOperation | sujet contrôlé par WorkService | accès indirect via le sujet métier |
+| ArtifactLink | World + release / external owner reference | lien opaque vers un artefact externe; jamais copie autoritative du payload |
+| Kristal Exchange / artifact | Kristal | connaissance épistémique; référencée par Orgo Worlds |
+| Runtime Pack / query materialization | propriétaire de déploiement, dérivé de Kristal | lecture/exécution; reconstructible et non autoritatif pour le workflow Orgo |
