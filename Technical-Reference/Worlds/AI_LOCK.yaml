@@ -1,0 +1,24 @@
+lock: ORGO-WORLDS-1
+product: Orgo_Worlds
+standalone: true
+sibling_of: Orgo
+tenancy: organization
+world_scope:
+  routing: /api/v3/w/{world_key}
+  database: row_keys
+  keys: [organization_id, world_id, world_release_id]
+release_semantics:
+  immutable_config: true
+  promotion_explicit: true
+  historical_rows_rewritten_on_promotion: false
+worker:
+  release_pinned_from_outbox: true
+identity:
+  scope: organization
+  world_membership_additive: true
+  federated_key: [issuer, subject]
+forbidden:
+  - shared_database_with_sibling_Orgo
+  - dynamic_postgresql_schema_per_world_release
+  - email_as_federated_identity_key
+  - world_switch_as_admin_mutation
