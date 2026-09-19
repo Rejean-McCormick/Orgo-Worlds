@@ -1,6 +1,51 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { z } from 'zod';
-import { DomainError } from '../../platform/contracts';
+
+
+export class DomainError extends Error {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly status = 400,
+  ) {
+    super(message);
+    this.name = 'DomainError';
+  }
+}
+
+export function parse<T>(schema: z.ZodType<T>, value: unknown): T {
+  const result = schema.safeParse(value);
+  if (!result.success)
+    throw new DomainError('VALIDATION_ERROR', result.error.issues.map((issue) => issue.message).join('; '), 400);
+  return result.data;
+}
+
+export type IntegrationRequest = {
+  operation_id: string;
+  organization_id: string;
+  operation: string;
+  idempotency_key: string;
+  correlation_id?: string | null;
+  subject: { type: string; id: string };
+  input: unknown;
+};
+
+export type IntegrationReceipt = {
+  status: 'accepted' | 'succeeded';
+  external_reference?: string;
+  data: Record<string, unknown>;
+};
+
+export class DeliveryError extends Error {
+  constructor(public readonly code: string, public readonly retryable = true) {
+    super(code);
+    this.name = 'DeliveryError';
+  }
+}
+
+export interface IntegrationPort {
+  execute(request: IntegrationRequest): Promise<IntegrationReceipt>;
+}
 
 export const IK_SPEC_VERSION = 'ik/1.1' as const;
 export const IK_FINGERPRINT_PROFILE =

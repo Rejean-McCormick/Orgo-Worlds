@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Inject, Param, Post, Query } from '@nestjs/common';
-import { Commands } from '../../../platform/database';
-import { ExecutionContext, parse } from '../../../platform/contracts';
-import { Ctx } from './boundary';
-import { InteractionKernelService } from '../../../modules/interaction-kernel/interaction-kernel.service';
+import { Body, Controller, Get, Headers, Inject, Param, Post, Query } from '@nestjs/common';
 import { z } from 'zod';
+import { InteractionKernelService } from '../../../modules/interaction-kernel/interaction-kernel.service';
+import {
+  contextFromHeaders,
+  type HeaderBag,
+} from '../../../modules/worlds/worlds.service';
 
 const artifactQuery = z
   .object({
@@ -18,52 +19,45 @@ export class InteractionKernelController {
   constructor(
     @Inject(InteractionKernelService)
     private readonly ik: InteractionKernelService,
-    @Inject(Commands) private readonly commands: Commands,
   ) {}
 
   @Post('interactions')
-  receive(@Ctx() ctx: ExecutionContext, @Body() body: unknown) {
-    return this.ik.receive(ctx, body);
+  receive(@Headers() headers: HeaderBag, @Body() body: unknown) {
+    return this.ik.receive(contextFromHeaders(headers), body);
   }
 
   @Post('exports')
-  exportManifest(@Ctx() ctx: ExecutionContext, @Body() body: unknown) {
-    return this.ik.exportManifest(ctx, body);
+  exportManifest(@Headers() headers: HeaderBag, @Body() body: unknown) {
+    return this.ik.exportManifest(contextFromHeaders(headers), body);
   }
 
   @Post('artifact-links')
-  linkArtifact(@Ctx() ctx: ExecutionContext, @Body() body: unknown) {
-    return this.commands.run(ctx, 'ik.artifact-link', body, (tx) =>
-      this.ik.linkArtifact(ctx, body, tx),
-    );
+  linkArtifact(@Headers() headers: HeaderBag, @Body() body: unknown) {
+    return this.ik.linkArtifact(contextFromHeaders(headers), body);
   }
 
   @Get('artifact-links')
-  listArtifactLinks(@Ctx() ctx: ExecutionContext, @Query() query: unknown) {
-    return this.ik.listArtifactLinks(ctx, parse(artifactQuery, query));
+  listArtifactLinks(@Headers() headers: HeaderBag, @Query() query: unknown) {
+    return this.ik.listArtifactLinks(contextFromHeaders(headers), artifactQuery.parse(query));
   }
 
   @Post('build-records')
-  createBuild(@Ctx() ctx: ExecutionContext, @Body() body: unknown) {
-    return this.commands.run(ctx, 'ik.build-record', body, (tx) =>
-      this.ik.createBuildRecord(ctx, body, tx),
-    );
+  createBuild(@Headers() headers: HeaderBag, @Body() body: unknown) {
+    return this.ik.createBuildRecord(contextFromHeaders(headers), body);
   }
 
   @Get('build-records/:id')
-  getBuild(@Ctx() ctx: ExecutionContext, @Param('id') id: string) {
-    return this.ik.getBuildRecord(ctx, parse(recordId, id));
+  getBuild(@Headers() headers: HeaderBag, @Param('id') id: string) {
+    return this.ik.getBuildRecord(contextFromHeaders(headers), recordId.parse(id));
   }
 
   @Post('release-records')
-  createRelease(@Ctx() ctx: ExecutionContext, @Body() body: unknown) {
-    return this.commands.run(ctx, 'ik.release-record', body, (tx) =>
-      this.ik.appendReleaseRecord(ctx, body, tx),
-    );
+  createRelease(@Headers() headers: HeaderBag, @Body() body: unknown) {
+    return this.ik.appendReleaseRecord(contextFromHeaders(headers), body);
   }
 
   @Get('release-records/:id')
-  getRelease(@Ctx() ctx: ExecutionContext, @Param('id') id: string) {
-    return this.ik.getReleaseRecord(ctx, parse(recordId, id));
+  getRelease(@Headers() headers: HeaderBag, @Param('id') id: string) {
+    return this.ik.getReleaseRecord(contextFromHeaders(headers), recordId.parse(id));
   }
 }

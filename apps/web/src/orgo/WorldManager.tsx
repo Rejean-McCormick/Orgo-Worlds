@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Actor, ApiError, OrgoClient } from "./api";
+import { ApiError, BrowserWorldsClient, type Actor } from "./WorldSwitcher";
 
 type Release = {
   id: string;
@@ -31,7 +31,7 @@ type Membership = {
   user?: { email?: string; display_name?: string };
 };
 
-const sessionClient = () => new OrgoClient();
+const sessionClient = () => new BrowserWorldsClient();
 
 function errText(error: unknown) {
   if (error instanceof ApiError) return `${error.code}: ${error.message}`;
@@ -67,16 +67,8 @@ export function WorldManager() {
   }, [client]);
 
   useEffect(() => {
-    if (!client.token) {
-      window.location.assign("/");
-      return;
-    }
-    client.request<Actor>("auth/me")
-      .then((value) => {
-        setActor(value);
-        return loadWorlds();
-      })
-      .catch((e) => setError(errText(e)));
+    setActor(client.actor);
+    void loadWorlds().catch((e) => setError(errText(e)));
   }, [client, loadWorlds]);
 
   useEffect(() => {

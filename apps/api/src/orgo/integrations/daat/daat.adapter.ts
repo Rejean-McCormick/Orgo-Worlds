@@ -1,4 +1,4 @@
-import { IntegrationPort, IntegrationRequest } from '../port';
+import type { IntegrationPort, IntegrationRequest } from '../interaction-kernel/contracts';
 import { InteractionKernelHttpBridge } from '../interaction-kernel/http-bridge';
 import { daatEnvelope } from '../interaction-kernel/outbound';
 

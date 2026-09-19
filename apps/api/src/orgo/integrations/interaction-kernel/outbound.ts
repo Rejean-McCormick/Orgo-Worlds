@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { DeliveryError, IntegrationRequest } from '../port';
-import type { InteractionEnvelope } from './contracts';
+import { DeliveryError, type IntegrationRequest, type InteractionEnvelope } from './contracts';
 
 function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value))

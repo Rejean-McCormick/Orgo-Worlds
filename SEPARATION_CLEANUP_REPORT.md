@@ -1,0 +1,453 @@
+# Worlds separation cleanup report
+
+- Cleaner: `2.2.0-exact-paths-drift-tolerant`
+- Applied: `2026-09-19T15:21:24-04:00`
+- Snapshot source: `Code_snapshot_Orgo_Worlds.zip`
+- Full snapshot path inventory matched before apply: `False`
+- Inventory drift was tolerated; only embedded exact paths were eligible for deletion.
+- Backup: `C:\mycode\Orgo\_worlds_separation_backups\Orgo_Worlds-before-separation-20260919-152124.zip`
+- Deleted exact files: **431**
+- Moves: **1**
+
+## Deleted exact paths
+
+- `.dockerignore`
+- `.env.example`
+- `.github/workflows/ci.yml`
+- `.gitignore`
+- `.koali-ks4-backup/20260918-143713/koali.integration.json`
+- `APPLY_PATCH.md`
+- `CHANGED_FILES_2026-09-16.txt`
+- `CODE_SNAPSHOT_MANIFEST.md`
+- `DELIVERY_MANIFEST.json`
+- `DOCUMENTATION_ALIGNMENT_2026-09-16.md`
+- `DROP_IN_WORLD_INJECTION_MANIFEST.md`
+- `LICENSE`
+- `ORGO_INTERACTION_KERNEL_v1.md`
+- `ORGO_INTERACTION_KERNEL_v1_MANIFEST.md`
+- `ORGO_INTERACTION_KERNEL_v1_VALIDATION.md`
+- `ORGO_KONNAXION_J30_BRIDGE_v2.md`
+- `ORGO_KONNAXION_J30_BRIDGE_v2_MANIFEST.md`
+- `ORGO_WORLDS_PHASE5_MANIFEST.json`
+- `OrgoScenarioInjector.pyw`
+- `Orgo_Konnaxion_Bridge_Manager.pyw`
+- `Orgo_Worlds_Interaction_Kernel_v1.patch`
+- `PATCH_MANIFEST.json`
+- `README.md`
+- `Technical-Reference/API_IMPLEMENTED.md`
+- `Technical-Reference/ARCHITECTURE_TO_CODE.md`
+- `Technical-Reference/Architecture upgrade(to do)/OPS-001_AI_Resilience_Strategy.md`
+- `Technical-Reference/Architecture upgrade(to do)/REF-001_Configuration_Manifest.md`
+- `Technical-Reference/Architecture upgrade(to do)/RFC-001_Nervous_System_Upgrade.md`
+- `Technical-Reference/Architecture upgrade(to do)/SPEC-001_Input_SenTient_ACL.md`
+- `Technical-Reference/Architecture upgrade(to do)/SPEC-002_Output_Architect_Outbox.md`
+- `Technical-Reference/BOUNDARIES_AND_OWNERSHIP.md`
+- `Technical-Reference/Boilerplate_Turborepo.md`
+- `Technical-Reference/CODE_ALIGNMENT_NOTES.md`
+- `Technical-Reference/COMMON_IDENTITY.md`
+- `Technical-Reference/COMPLETION_DECISIONS.md`
+- `Technical-Reference/CONTRACTS.md`
+- `Technical-Reference/GENERALinstructionsForAI.txt`
+- `Technical-Reference/GLOSSARY.md`
+- `Technical-Reference/Glossary-Letters.txt`
+- `Technical-Reference/HowToStartAndEnter.txt`
+- `Technical-Reference/IMPLEMENTATION_DECISIONS.md`
+- `Technical-Reference/IMPLEMENTATION_STATUS.md`
+- `Technical-Reference/INTEGRATION_BRIDGE.md`
+- `Technical-Reference/INTERACTION_KERNEL.md`
+- `Technical-Reference/LOCAL_VALIDATION.md`
+- `Technical-Reference/SCENARIO_INJECTOR.md`
+- `Technical-Reference/Semantic-Charters.md`
+- `Technical-Reference/TARGET_ARCHITECTURE.md`
+- `Technical-Reference/UI_AND_KOALI_INTEGRATION.md`
+- `Technical-Reference/WikiData-Orgo_Chart.md`
+- `Technical-Reference/Worlds/00_CANONICAL_SPEC.md`
+- `Technical-Reference/Worlds/01_CURRENT_STATE_BASELINE.md`
+- `Technical-Reference/Worlds/02_GLOSSARY.md`
+- `Technical-Reference/Worlds/03_ARCHITECTURE.md`
+- `Technical-Reference/Worlds/04_DATA_OWNERSHIP_MATRIX.md`
+- `Technical-Reference/Worlds/05_DATA_MODEL.md`
+- `Technical-Reference/Worlds/06_RUNTIME_CONTEXT_AND_ROUTING.md`
+- `Technical-Reference/Worlds/07_SEEDS_RELEASES_SNAPSHOTS.md`
+- `Technical-Reference/Worlds/08_IDENTITY_MEMBERSHIP_PERSONAS.md`
+- `Technical-Reference/Worlds/09_INFRASTRUCTURE_SCOPING.md`
+- `Technical-Reference/Worlds/10_CONTROL_PLANE_API.md`
+- `Technical-Reference/Worlds/11_WORLD_MANAGER_UI.md`
+- `Technical-Reference/Worlds/12_SECURITY_AND_FAILURE_MODES.md`
+- `Technical-Reference/Worlds/13_TEST_AND_ACCEPTANCE_PLAN.md`
+- `Technical-Reference/Worlds/14_MIGRATION_PLAN.md`
+- `Technical-Reference/Worlds/15_OPERATIONS_RUNBOOK.md`
+- `Technical-Reference/Worlds/16_AI_LOCK_ANTI_DRIFT.md`
+- `Technical-Reference/Worlds/17_ADR_REGISTER.md`
+- `Technical-Reference/Worlds/18_IMPLEMENTATION_CHECKLIST.md`
+- `Technical-Reference/Worlds/AI_LOCK.yaml`
+- `Technical-Reference/eliteUserList_clean.csv`
+- `Technical-Reference/v3/1-Orgo v3 - Database Schema Reference.md`
+- `Technical-Reference/v3/1-orgo-database-schema-reference.md`
+- `Technical-Reference/v3/2-Orgo v3 - Architecture and Invariants.md`
+- `Technical-Reference/v3/2-orgo-documentation-index.md`
+- `Technical-Reference/v3/3-Orgo v3 - Task Case and Workflow Contract.md`
+- `Technical-Reference/v3/3-orgo-full-stack-technical-spec.md`
+- `Technical-Reference/v3/4-Orgo v3 - Domain Modules.md`
+- `Technical-Reference/v3/4-orgo-functional-code-name-inventory.md`
+- `Technical-Reference/v3/5-Orgo v3 - Labels Profiles and Cyclic Overview.md`
+- `Technical-Reference/v3/5-orgo-Core-Services-Specification.md`
+- `Technical-Reference/v3/6-Orgo v3 - Insights and Analytics.md`
+- `Technical-Reference/v3/6-orgo-insights-module-config-parameters.md`
+- `Technical-Reference/v3/7-Orgo v3 - API Surface.md`
+- `Technical-Reference/v3/7-orgo-organization-profiles-and-cyclic-overview.md`
+- `Technical-Reference/v3/8-Orgo v3 - Documentation Index.md`
+- `Technical-Reference/v3/8-orgo-cyclic-overview-labels-and-flow-rules.md`
+- `VALIDATE_ORGO_INTERACTION_KERNEL_v1.ps1`
+- `VALIDATE_ORGO_KONNAXION_BRIDGE_v2.ps1`
+- `WORLDS_IMPLEMENTATION_FINAL.md`
+- `apps/api/.prettierrc`
+- `apps/api/Dockerfile`
+- `apps/api/README.md`
+- `apps/api/package.json`
+- `apps/api/prisma/migrations/20220307034109_initial_migrate/migration.sql`
+- `apps/api/prisma/migrations/20251127134632_init/migration.sql`
+- `apps/api/prisma/migrations/20260908220000_work_foundations/migration.sql`
+- `apps/api/prisma/migrations/20260909160000_product_completion/migration.sql`
+- `apps/api/prisma/migrations/migration_lock.toml`
+- `apps/api/prisma/schema.prisma`
+- `apps/api/prisma/seed.ts`
+- `apps/api/src/app.module.ts`
+- `apps/api/src/bootstrap.ts`
+- `apps/api/src/main.ts`
+- `apps/api/src/orgo/adapters/inbound/http/admin.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/auth.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/boundary.ts`
+- `apps/api/src/orgo/adapters/inbound/http/completion.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/health.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/ingress.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/operations.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/process.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/product-operations.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/routing.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/sso.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/sync.controller.ts`
+- `apps/api/src/orgo/adapters/inbound/http/work.controller.ts`
+- `apps/api/src/orgo/integrations/architect/architect.adapter.ts`
+- `apps/api/src/orgo/integrations/http-bridge.ts`
+- `apps/api/src/orgo/integrations/koa/koa.adapter.ts`
+- `apps/api/src/orgo/integrations/konnaxion/konnaxion.adapter.ts`
+- `apps/api/src/orgo/integrations/kristal/kristal.adapter.ts`
+- `apps/api/src/orgo/integrations/port.ts`
+- `apps/api/src/orgo/modules/communications/channels/http-delivery.ts`
+- `apps/api/src/orgo/modules/communications/communications.service.ts`
+- `apps/api/src/orgo/modules/communications/templates.ts`
+- `apps/api/src/orgo/modules/domains/domain-management.service.ts`
+- `apps/api/src/orgo/modules/domains/domains.service.ts`
+- `apps/api/src/orgo/modules/identity/identity-admin.service.ts`
+- `apps/api/src/orgo/modules/identity/identity.module.ts`
+- `apps/api/src/orgo/modules/identity/identity.service.ts`
+- `apps/api/src/orgo/modules/identity/oidc.service.ts`
+- `apps/api/src/orgo/modules/insights/insights.service.ts`
+- `apps/api/src/orgo/modules/intake/intake.module.ts`
+- `apps/api/src/orgo/modules/intake/intake.service.ts`
+- `apps/api/src/orgo/modules/integrations/operations.service.ts`
+- `apps/api/src/orgo/modules/orchestration/actions.ts`
+- `apps/api/src/orgo/modules/orchestration/escalation.service.ts`
+- `apps/api/src/orgo/modules/orchestration/evaluator.ts`
+- `apps/api/src/orgo/modules/orchestration/orchestration.module.ts`
+- `apps/api/src/orgo/modules/orchestration/process-manager.service.ts`
+- `apps/api/src/orgo/modules/orchestration/public.ts`
+- `apps/api/src/orgo/modules/orchestration/routing.service.ts`
+- `apps/api/src/orgo/modules/orchestration/workflow.contract.ts`
+- `apps/api/src/orgo/modules/orchestration/workflow.service.ts`
+- `apps/api/src/orgo/modules/work/evidence.service.ts`
+- `apps/api/src/orgo/modules/work/public.ts`
+- `apps/api/src/orgo/modules/work/work.contract.ts`
+- `apps/api/src/orgo/modules/work/work.module.ts`
+- `apps/api/src/orgo/modules/work/work.service.ts`
+- `apps/api/src/orgo/platform/contracts.ts`
+- `apps/api/src/orgo/platform/database.ts`
+- `apps/api/src/orgo/platform/outbox/worker.service.ts`
+- `apps/api/src/orgo/platform/platform.module.ts`
+- `apps/api/src/orgo/platform/telemetry.ts`
+- `apps/api/src/orgo/runtime.module.ts`
+- `apps/api/src/worker.ts`
+- `apps/api/test/integration/runtime.test.ts`
+- `apps/api/test/unit/client.test.ts`
+- `apps/api/test/unit/contracts.test.ts`
+- `apps/api/test/unit/oidc-url.test.ts`
+- `apps/api/test/unit/templates.test.ts`
+- `apps/api/tsconfig.build.json`
+- `apps/api/tsconfig.json`
+- `apps/web/.env.example`
+- `apps/web/.eslintrc.js`
+- `apps/web/Dockerfile`
+- `apps/web/README.md`
+- `apps/web/next-env.d.ts`
+- `apps/web/next.config.js`
+- `apps/web/package.json`
+- `apps/web/pages/[[...path]].tsx`
+- `apps/web/pages/_app.tsx`
+- `apps/web/pages/account.tsx`
+- `apps/web/postcss.config.js`
+- `apps/web/src/orgo/Extensions.tsx`
+- `apps/web/src/orgo/OrgoApp.tsx`
+- `apps/web/src/orgo/api.ts`
+- `apps/web/src/orgo/hosted-entry.tsx`
+- `apps/web/src/orgo/offline.ts`
+- `apps/web/src/orgo/profiles.ts`
+- `apps/web/src/orgo/public-contract.ts`
+- `apps/web/src/styles.css`
+- `apps/web/tsconfig.json`
+- `charters/care.json`
+- `charters/care_hospital.json`
+- `charters/care_nursing_home.json`
+- `charters/care_school.json`
+- `charters/care_social_services.json`
+- `charters/general.json`
+- `charters/groups.json`
+- `charters/groups_associations.json`
+- `charters/groups_sports.json`
+- `charters/incidents.json`
+- `charters/incidents_it_helpdesk.json`
+- `charters/incidents_sst.json`
+- `charters/operations.json`
+- `charters/operations_facilities.json`
+- `charters/operations_manufacturing.json`
+- `charters/operations_transport_logistics.json`
+- `charters/programs.json`
+- `charters/programs_government.json`
+- `charters/programs_humanitarian.json`
+- `concat_orgo.py`
+- `docker-compose.yml`
+- `docs/README.md`
+- `docs/Technical-Reference/API_IMPLEMENTED.md`
+- `docs/Technical-Reference/ARCHITECTURE_TO_CODE.md`
+- `docs/Technical-Reference/Architecture upgrade(to do)/OPS-001_AI_Resilience_Strategy.md`
+- `docs/Technical-Reference/Architecture upgrade(to do)/REF-001_Configuration_Manifest.md`
+- `docs/Technical-Reference/Architecture upgrade(to do)/RFC-001_Nervous_System_Upgrade.md`
+- `docs/Technical-Reference/Architecture upgrade(to do)/SPEC-001_Input_SenTient_ACL.md`
+- `docs/Technical-Reference/Architecture upgrade(to do)/SPEC-002_Output_Architect_Outbox.md`
+- `docs/Technical-Reference/BOUNDARIES_AND_OWNERSHIP.md`
+- `docs/Technical-Reference/Boilerplate_Turborepo.md`
+- `docs/Technical-Reference/CODE_ALIGNMENT_NOTES.md`
+- `docs/Technical-Reference/COMMON_IDENTITY.md`
+- `docs/Technical-Reference/COMPLETION_DECISIONS.md`
+- `docs/Technical-Reference/CONTRACTS.md`
+- `docs/Technical-Reference/GENERALinstructionsForAI.txt`
+- `docs/Technical-Reference/GLOSSARY.md`
+- `docs/Technical-Reference/Glossary-Letters.txt`
+- `docs/Technical-Reference/HowToStartAndEnter.txt`
+- `docs/Technical-Reference/IMPLEMENTATION_DECISIONS.md`
+- `docs/Technical-Reference/INTEGRATION_BRIDGE.md`
+- `docs/Technical-Reference/LOCAL_VALIDATION.md`
+- `docs/Technical-Reference/SCENARIO_INJECTOR.md`
+- `docs/Technical-Reference/Semantic-Charters.md`
+- `docs/Technical-Reference/TARGET_ARCHITECTURE.md`
+- `docs/Technical-Reference/UI_AND_KOALI_INTEGRATION.md`
+- `docs/Technical-Reference/WikiData-Orgo_Chart.md`
+- `docs/Technical-Reference/Worlds/01_CURRENT_STATE_BASELINE.md`
+- `docs/Technical-Reference/Worlds/14_MIGRATION_PLAN.md`
+- `docs/Technical-Reference/eliteUserList_clean.csv`
+- `docs/Technical-Reference/v3/1-Orgo v3 - Database Schema Reference.md`
+- `docs/Technical-Reference/v3/1-orgo-database-schema-reference.md`
+- `docs/Technical-Reference/v3/2-Orgo v3 - Architecture and Invariants.md`
+- `docs/Technical-Reference/v3/2-orgo-documentation-index.md`
+- `docs/Technical-Reference/v3/3-Orgo v3 - Task Case and Workflow Contract.md`
+- `docs/Technical-Reference/v3/3-orgo-full-stack-technical-spec.md`
+- `docs/Technical-Reference/v3/4-Orgo v3 - Domain Modules.md`
+- `docs/Technical-Reference/v3/4-orgo-functional-code-name-inventory.md`
+- `docs/Technical-Reference/v3/5-Orgo v3 - Labels Profiles and Cyclic Overview.md`
+- `docs/Technical-Reference/v3/5-orgo-Core-Services-Specification.md`
+- `docs/Technical-Reference/v3/6-Orgo v3 - Insights and Analytics.md`
+- `docs/Technical-Reference/v3/6-orgo-insights-module-config-parameters.md`
+- `docs/Technical-Reference/v3/7-Orgo v3 - API Surface.md`
+- `docs/Technical-Reference/v3/7-orgo-organization-profiles-and-cyclic-overview.md`
+- `docs/Technical-Reference/v3/8-Orgo v3 - Documentation Index.md`
+- `docs/Technical-Reference/v3/8-orgo-cyclic-overview-labels-and-flow-rules.md`
+- `examples/intake-incidents.json`
+- `examples/process-validate-publish.json`
+- `koali.integration.json`
+- `legacy/README.md`
+- `legacy/api-src/app.controller.spec.ts`
+- `legacy/api-src/app.controller.ts`
+- `legacy/api-src/app.module.ts`
+- `legacy/api-src/app.service.ts`
+- `legacy/api-src/config/environment-variables.ts`
+- `legacy/api-src/main.ts`
+- `legacy/api-src/orgo/backbone/identity/dto/link-user-person.dto.ts`
+- `legacy/api-src/orgo/backbone/identity/identity-link.controller.ts`
+- `legacy/api-src/orgo/backbone/identity/identity-link.module.ts`
+- `legacy/api-src/orgo/backbone/identity/identity-link.service.ts`
+- `legacy/api-src/orgo/backbone/organizations/dto/create-organization.dto.ts`
+- `legacy/api-src/orgo/backbone/organizations/dto/update-organization.dto.ts`
+- `legacy/api-src/orgo/backbone/organizations/organization.controller.ts`
+- `legacy/api-src/orgo/backbone/organizations/organization.module.ts`
+- `legacy/api-src/orgo/backbone/organizations/organization.service.ts`
+- `legacy/api-src/orgo/backbone/persons/dto/upsert-person-profile.dto.ts`
+- `legacy/api-src/orgo/backbone/persons/person-profile.controller.ts`
+- `legacy/api-src/orgo/backbone/persons/person-profile.module.ts`
+- `legacy/api-src/orgo/backbone/persons/person-profile.service.ts`
+- `legacy/api-src/orgo/backbone/rbac/dto/assign-permission.dto.ts`
+- `legacy/api-src/orgo/backbone/rbac/dto/create-role.dto.ts`
+- `legacy/api-src/orgo/backbone/rbac/permission.service.ts`
+- `legacy/api-src/orgo/backbone/rbac/rbac.controller.ts`
+- `legacy/api-src/orgo/backbone/rbac/rbac.module.ts`
+- `legacy/api-src/orgo/backbone/rbac/role.service.ts`
+- `legacy/api-src/orgo/config/config.controller.ts`
+- `legacy/api-src/orgo/config/config.module.ts`
+- `legacy/api-src/orgo/config/config.service.ts`
+- `legacy/api-src/orgo/config/feature-flag.controller.ts`
+- `legacy/api-src/orgo/config/feature-flag.service.ts`
+- `legacy/api-src/orgo/config/org-profile.controller.ts`
+- `legacy/api-src/orgo/config/org-profile.service.ts`
+- `legacy/api-src/orgo/core/alerts/alerting.service.ts`
+- `legacy/api-src/orgo/core/cases/case.controller.ts`
+- `legacy/api-src/orgo/core/cases/case.module.ts`
+- `legacy/api-src/orgo/core/cases/case.service.ts`
+- `legacy/api-src/orgo/core/cases/dto/create-case.dto.ts`
+- `legacy/api-src/orgo/core/cases/dto/update-case-status.dto.ts`
+- `legacy/api-src/orgo/core/database/database.service.ts`
+- `legacy/api-src/orgo/core/database/repository-factory.service.ts`
+- `legacy/api-src/orgo/core/email/email-ingest.service.ts`
+- `legacy/api-src/orgo/core/email/email-parser.service.ts`
+- `legacy/api-src/orgo/core/email/email-router.service.ts`
+- `legacy/api-src/orgo/core/email/email-validator.service.ts`
+- `legacy/api-src/orgo/core/email/email.controller.ts`
+- `legacy/api-src/orgo/core/email/email.module.ts`
+- `legacy/api-src/orgo/core/email/email.service.ts`
+- `legacy/api-src/orgo/core/functional-ids.ts`
+- `legacy/api-src/orgo/core/health/health.controller.ts`
+- `legacy/api-src/orgo/core/health/worker-health.service.ts`
+- `legacy/api-src/orgo/core/labels/label-routing.service.ts`
+- `legacy/api-src/orgo/core/labels/label.service.ts`
+- `legacy/api-src/orgo/core/labels/labels.module.ts`
+- `legacy/api-src/orgo/core/labels/routing-rule.service.ts`
+- `legacy/api-src/orgo/core/logging/log.service.ts`
+- `legacy/api-src/orgo/core/logging/logger.module.ts`
+- `legacy/api-src/orgo/core/metrics/metrics.service.ts`
+- `legacy/api-src/orgo/core/notifications/notification.controller.ts`
+- `legacy/api-src/orgo/core/notifications/notification.module.ts`
+- `legacy/api-src/orgo/core/notifications/notification.service.ts`
+- `legacy/api-src/orgo/core/offline/offline-sync.module.ts`
+- `legacy/api-src/orgo/core/offline/sync.service.ts`
+- `legacy/api-src/orgo/core/signals/dto/create-signal.dto.ts`
+- `legacy/api-src/orgo/core/signals/signal-ingest.service.ts`
+- `legacy/api-src/orgo/core/signals/signal.controller.ts`
+- `legacy/api-src/orgo/core/signals/signals.module.ts`
+- `legacy/api-src/orgo/core/tasks/dto/create-task.dto.ts`
+- `legacy/api-src/orgo/core/tasks/dto/update-task-status.dto.ts`
+- `legacy/api-src/orgo/core/tasks/task-events.gateway.ts`
+- `legacy/api-src/orgo/core/tasks/task-events.service.ts`
+- `legacy/api-src/orgo/core/tasks/task.controller.ts`
+- `legacy/api-src/orgo/core/tasks/task.module.ts`
+- `legacy/api-src/orgo/core/tasks/task.service.ts`
+- `legacy/api-src/orgo/core/validation/config-validation.service.ts`
+- `legacy/api-src/orgo/core/validation/metadata.service.ts`
+- `legacy/api-src/orgo/core/validation/payload-validation.pipe.ts`
+- `legacy/api-src/orgo/core/workflow/escalation.service.ts`
+- `legacy/api-src/orgo/core/workflow/workflow-engine.service.ts`
+- `legacy/api-src/orgo/core/workflow/workflow.controller.ts`
+- `legacy/api-src/orgo/core/workflow/workflow.module.ts`
+- `legacy/api-src/orgo/domain/domain-task.factory.ts`
+- `legacy/api-src/orgo/domain/domain-workflow.service.ts`
+- `legacy/api-src/orgo/domain/education/education.controller.ts`
+- `legacy/api-src/orgo/domain/education/education.module.ts`
+- `legacy/api-src/orgo/domain/education/education.service.ts`
+- `legacy/api-src/orgo/domain/hr/hr.controller.ts`
+- `legacy/api-src/orgo/domain/hr/hr.module.ts`
+- `legacy/api-src/orgo/domain/hr/hr.service.ts`
+- `legacy/api-src/orgo/domain/hr/hr.service.ts.BAK`
+- `legacy/api-src/orgo/domain/maintenance/maintenance.controller.ts`
+- `legacy/api-src/orgo/domain/maintenance/maintenance.module.ts`
+- `legacy/api-src/orgo/domain/maintenance/maintenance.service.ts`
+- `legacy/api-src/orgo/insights/cache/insights-cache-warmup.service.ts`
+- `legacy/api-src/orgo/insights/export/analytics-export.service.ts`
+- `legacy/api-src/orgo/insights/insights-cache-warmup.service.ts`
+- `legacy/api-src/orgo/insights/insights.module.ts`
+- `legacy/api-src/orgo/insights/pattern-detection.service.ts`
+- `legacy/api-src/orgo/insights/patterns/pattern-detection.service.ts`
+- `legacy/api-src/orgo/insights/reports/reports.controller.ts`
+- `legacy/api-src/orgo/insights/reports/reports.service.ts`
+- `legacy/api-src/orgo/orgo.module.ts`
+- `legacy/api-src/orgo/security/audit/audit-trail.service.ts`
+- `legacy/api-src/orgo/security/auth/auth.guard.ts`
+- `legacy/api-src/orgo/security/auth/auth.module.ts`
+- `legacy/api-src/orgo/security/auth/auth.service.ts`
+- `legacy/api-src/orgo/security/compliance/compliance-export.service.ts`
+- `legacy/api-src/orgo/security/logging/log-query.service.ts`
+- `legacy/api-src/orgo/security/privacy/privacy.service.ts`
+- `legacy/api-src/orgo/security/rbac/rbac.service.ts`
+- `legacy/api-src/persistence/persistence.module.ts`
+- `legacy/api-src/persistence/prisma/prisma.service.spec.ts`
+- `legacy/api-src/persistence/prisma/prisma.service.ts`
+- `legacy/api-test/app.e2e-spec.ts`
+- `legacy/api-test/jest-e2e.json`
+- `legacy/tooling/apps/api/.eslintrc.js`
+- `legacy/tooling/apps/api/nest-cli.json`
+- `legacy/tooling/apps/api/webpack-hmr.config.js`
+- `legacy/tooling/apps/web/jest.config.js`
+- `legacy/tooling/apps/web/jest.setup.js`
+- `legacy/tooling/apps/web/tailwind.config.js`
+- `legacy/tooling/package-scripts.js`
+- `legacy/tooling/turbo.json`
+- `legacy/web-pages/_app.tsx`
+- `legacy/web-pages/index.tsx`
+- `legacy/web-src/common/.gitkeep`
+- `legacy/web-src/orgo/core/functional-ids.ts`
+- `legacy/web-src/orgo/hooks/useTaskEventStream.ts`
+- `legacy/web-src/orgo/types/case.ts`
+- `legacy/web-src/orgo/types/insights.ts`
+- `legacy/web-src/orgo/types/organization.ts`
+- `legacy/web-src/orgo/types/permission.ts`
+- `legacy/web-src/orgo/types/person.ts`
+- `legacy/web-src/orgo/types/profile.ts`
+- `legacy/web-src/orgo/types/role.ts`
+- `legacy/web-src/orgo/types/task.ts`
+- `legacy/web-src/providers/AppProviders.tsx`
+- `legacy/web-src/screens/admin/.gitkeep`
+- `legacy/web-src/screens/admin/cases/AdminCaseOverviewPage.tsx`
+- `legacy/web-src/screens/admin/insights/InsightsOverviewPage.tsx`
+- `legacy/web-src/screens/admin/org/OrgProfileSettingsPage.tsx`
+- `legacy/web-src/screens/admin/profiles/OrgProfileSettingsPage.tsx`
+- `legacy/web-src/screens/admin/tasks/AdminTaskOverviewPage.tsx`
+- `legacy/web-src/screens/auth/login/login.test.tsx`
+- `legacy/web-src/screens/auth/login/login.tsx`
+- `legacy/web-src/screens/common/.gitkeep`
+- `legacy/web-src/screens/employee/.gitkeep`
+- `legacy/web-src/screens/insights/InsightsOverviewPage.tsx`
+- `legacy/web-src/store/index.ts`
+- `legacy/web-src/store/services/api.ts`
+- `legacy/web-src/store/services/orgoApi.ts`
+- `legacy/web-src/styles/global.css`
+- `runtime/world-injections/uckk-a014/J3.import-report.json`
+- `runtime/world-injections/uckk-a014/J30.import-report.json`
+- `runtime/world-injections/uckk-a014/T-14.import-report.json`
+- `runtime/world-injections/uckk-a014/T-7.import-report.json`
+- `runtime/world-injections/uckk-a014/T0-post.import-report.json`
+- `runtime/world-injections/uckk-a014/T0-pre.import-report.json`
+- `scripts/check-architecture.mjs`
+- `scripts/email-ingress.py`
+- `scripts/legacy-preflight.mjs`
+- `scripts/operations/backup.sh`
+- `scripts/operations/restore.sh`
+- `scripts/test-pglite.mjs`
+- `scripts/validate-common-login.ps1`
+- `scripts/validate-local.mjs`
+- `tools/scenario-injector/AI_TEMPLATE.md`
+- `tools/scenario-injector/README.md`
+- `tools/scenario-injector/cli.mjs`
+- `tools/scenario-injector/examples/uckk-a014.scenario.json`
+- `tools/scenario-injector/lib.mjs`
+- `tools/scenario-injector/scenario.ps1`
+- `tools/scenario-injector/tests/lib.test.mjs`
+- `validation/README.md`
+- `validation/completion/STATUS.md`
+- `validation/local-2026-09-10T22-02-00-042Z/results.json`
+- `validation/worlds-phase5-static-2026-09-11T15-45-00Z/native-gate-status.txt`
+- `validation/worlds-phase5-static-2026-09-11T15-45-00Z/results.json`
+
+## Moves
+
+- `WORLD_SCENARIO_INJECTION.md` → `docs/Technical-Reference/Worlds/WORLD_SCENARIO_INJECTION.md`
+
+## Next step
+
+Rebuild the standalone bootstrap/configuration around the retained Worlds-owned code.
+This cleaner intentionally does not restore imports or compatibility shims from the main application.

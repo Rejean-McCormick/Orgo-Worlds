@@ -1,440 +1,396 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Prisma, WorldMembershipRole } from '@prisma/client';
-import { Database, json, lock, Tx } from '../../platform/database';
-import {
-  DomainError,
-  ExecutionContext,
-  hash,
-  requirePermission,
-} from '../../platform/contracts';
+import { createHash, randomUUID } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { Injectable } from '@nestjs/common';
+import { DomainError } from '../../integrations/interaction-kernel/contracts';
 
-export interface WorldRuntime {
-  worldId: string;
-  worldKey: string;
-  worldTitle: string;
-  worldReleaseId: string;
-  worldReleaseNumber: number;
-  worldRole?: WorldMembershipRole;
-  worldStatus: string;
+export type WorldRole = 'owner' | 'maintainer' | 'member' | 'viewer';
+
+export type WorldsExecutionContext = {
+  organizationId: string;
+  userId: string;
+  permissions: string[];
+  worldKey?: string;
+  worldId?: string;
+  worldTitle?: string;
+  worldStatus?: string;
+  worldRole?: WorldRole | null;
+  worldReleaseId?: string;
+  worldReleaseNumber?: number;
+  idempotencyKey?: string;
+  correlationId?: string;
+};
+
+export type HeaderBag = Record<string, string | string[] | undefined>;
+
+function header(headers: HeaderBag, name: string): string | undefined {
+  const raw = headers[name] ?? headers[name.toLowerCase()];
+  return Array.isArray(raw) ? raw[0] : raw;
 }
 
-const MANAGE_ROLES = new Set<WorldMembershipRole>(['owner', 'maintainer']);
+export function contextFromHeaders(headers: HeaderBag): WorldsExecutionContext {
+  const permissions = (
+    header(headers, 'x-orgo-permissions') ?? process.env.ORGO_WORLDS_PERMISSIONS ?? '*'
+  )
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const releaseNumber = Number(header(headers, 'x-orgo-world-release-number') || '');
+  return {
+    organizationId:
+      header(headers, 'x-orgo-organization-id') ??
+      process.env.ORGO_WORLDS_ORGANIZATION_ID ??
+      'local',
+    userId: header(headers, 'x-orgo-user-id') ?? process.env.ORGO_WORLDS_USER_ID ?? '00000000-0000-4000-8000-000000000001',
+    permissions,
+    worldKey: header(headers, 'x-orgo-world-key') ?? undefined,
+    worldId: header(headers, 'x-orgo-world-id') ?? undefined,
+    worldReleaseId: header(headers, 'x-orgo-world-release-id') ?? undefined,
+    worldReleaseNumber: Number.isFinite(releaseNumber) && releaseNumber > 0 ? releaseNumber : undefined,
+    idempotencyKey: header(headers, 'idempotency-key') ?? undefined,
+    correlationId: header(headers, 'x-correlation-id') ?? undefined,
+  };
+}
+
+export function requirePermission(ctx: WorldsExecutionContext, permission: string) {
+  if (!ctx.permissions.includes('*') && !ctx.permissions.includes(permission))
+    throw new DomainError('FORBIDDEN', `Missing permission: ${permission}`, 403);
+}
+
+type Release = {
+  id: string;
+  world_id: string;
+  release_number: number;
+  status: 'ready' | 'current' | 'frozen' | 'archived';
+  label: string;
+  config: Record<string, unknown>;
+  content_hash: string;
+  created_at: string;
+  promoted_at?: string | null;
+};
+
+type Membership = {
+  id: string;
+  world_id: string;
+  user_id: string;
+  role: WorldRole;
+  is_active: boolean;
+};
+
+type World = {
+  id: string;
+  organization_id: string;
+  key: string;
+  title: string;
+  description: string;
+  status: 'active' | 'archived';
+  visibility: 'organization' | 'private';
+  is_default: boolean;
+  current_release_id: string | null;
+  created_at: string;
+};
+
+type Store = {
+  version: 1;
+  worlds: World[];
+  releases: Release[];
+  memberships: Membership[];
+};
+
+const MANAGE_ROLES = new Set<WorldRole>(['owner', 'maintainer']);
+
+function digest(value: unknown): string {
+  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
+
+function now() {
+  return new Date().toISOString();
+}
 
 @Injectable()
 export class WorldsService {
-  constructor(@Inject(Database) private readonly db: Database) {}
+  private readonly file =
+    process.env.ORGO_WORLDS_STATE_FILE ?? path.resolve(process.cwd(), 'runtime', 'orgo-worlds-state.json');
+  private state: Store;
 
-  private async audit(
-    tx: Tx,
-    ctx: ExecutionContext,
-    worldId: string,
-    action: string,
-    details: unknown,
-    releaseId?: string,
-  ) {
-    await tx.worldAuditEvent.create({
-      data: {
-        organization_id: ctx.organizationId,
-        world_id: worldId,
-        release_id: releaseId,
-        actor_user_id: ctx.actorUserId,
-        action,
-        details: json(details),
-      },
-    });
+  constructor() {
+    this.state = this.load();
   }
 
-  async ensureDefaultWorld(
-    organizationId: string,
-    actorUserId?: string | null,
-  ) {
-    const existing = await this.db.world.findFirst({
-      where: { organization_id: organizationId, is_default: true },
-      include: { current_release: true },
-    });
-    if (existing?.current_release) return existing;
-
-    return this.db.$transaction(async (tx) => {
-      await lock(tx, `world-default:${organizationId}`);
-      const concurrent = await tx.world.findFirst({
-        where: { organization_id: organizationId, is_default: true },
-        include: { current_release: true },
-      });
-      if (concurrent?.current_release) return concurrent;
-
-      const world = concurrent ??
-        (await tx.world.create({
-          data: {
-            organization_id: organizationId,
-            key: 'main',
-            title: 'Main',
-            description: 'Default Orgo World created for compatibility.',
-            visibility: 'organization',
-            is_default: true,
-            created_by_user_id: actorUserId ?? null,
-          },
-        }));
-      const release = await tx.worldRelease.create({
-        data: {
-          organization_id: organizationId,
-          world_id: world.id,
+  private load(): Store {
+    if (fs.existsSync(this.file)) {
+      const parsed = JSON.parse(fs.readFileSync(this.file, 'utf8')) as Store;
+      if (parsed?.version === 1) return parsed;
+    }
+    const worldId = randomUUID();
+    const releaseId = randomUUID();
+    const created = now();
+    const initial: Store = {
+      version: 1,
+      worlds: [
+        {
+          id: worldId,
+          organization_id: process.env.ORGO_WORLDS_ORGANIZATION_ID ?? 'local',
+          key: 'main',
+          title: 'Main World',
+          description: 'Standalone Orgo Worlds control plane.',
+          status: 'active',
+          visibility: 'organization',
+          is_default: true,
+          current_release_id: releaseId,
+          created_at: created,
+        },
+      ],
+      releases: [
+        {
+          id: releaseId,
+          world_id: worldId,
           release_number: 1,
           status: 'current',
           label: 'Initial',
           config: {},
-          content_hash: hash({ world: world.key, release: 1, config: {} }),
-          created_by_user_id: actorUserId ?? null,
-          promoted_at: new Date(),
+          content_hash: digest({ world: 'main', release: 1 }),
+          created_at: created,
+          promoted_at: created,
         },
-      });
-      const updated = await tx.world.update({
-        where: { id: world.id },
-        data: { current_release_id: release.id },
-        include: { current_release: true },
-      });
-      if (actorUserId)
-        await tx.worldMembership.upsert({
-          where: { world_id_user_id: { world_id: world.id, user_id: actorUserId } },
-          create: {
-            organization_id: organizationId,
-            world_id: world.id,
-            user_id: actorUserId,
-            role: 'owner',
-          },
-          update: { is_active: true },
-        });
-      return updated;
-    });
+      ],
+      memberships: [
+        {
+          id: randomUUID(),
+          world_id: worldId,
+          user_id: process.env.ORGO_WORLDS_USER_ID ?? '00000000-0000-4000-8000-000000000001',
+          role: 'owner',
+          is_active: true,
+        },
+      ],
+    };
+    this.persist(initial);
+    return initial;
   }
 
-  async resolve(
-    ctx: ExecutionContext,
-    requestedKey?: string | null,
-    allowArchived = false,
-  ): Promise<WorldRuntime> {
-    let world = requestedKey
-      ? await this.db.world.findUnique({
-          where: {
-            organization_id_key: {
-              organization_id: ctx.organizationId,
-              key: requestedKey,
-            },
-          },
-          include: { current_release: true },
-        })
-      : await this.db.world.findFirst({
-          where: { organization_id: ctx.organizationId, is_default: true },
-          include: { current_release: true },
-        });
+  private persist(state = this.state) {
+    fs.mkdirSync(path.dirname(this.file), { recursive: true });
+    fs.writeFileSync(this.file, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+  }
 
-    if (!world && !requestedKey)
-      world = await this.ensureDefaultWorld(ctx.organizationId, ctx.actorUserId);
-    if (!world)
-      throw new DomainError('WORLD_NOT_FOUND', 'World not found', 404);
-    if (world.status === 'archived' && !allowArchived)
-      throw new DomainError('WORLD_ARCHIVED', 'World is archived', 409);
-    if (!world.current_release)
-      throw new DomainError(
-        'WORLD_RELEASE_NOT_READY',
-        'World has no current release',
-        409,
-      );
+  private world(ctx: WorldsExecutionContext, key: string): World {
+    const world = this.state.worlds.find(
+      (candidate) => candidate.organization_id === ctx.organizationId && candidate.key === key,
+    );
+    if (!world) throw new DomainError('WORLD_NOT_FOUND', `World not found: ${key}`, 404);
+    if (!this.canRead(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World access denied', 403);
+    return world;
+  }
 
-    const membership = ctx.actorUserId
-      ? await this.db.worldMembership.findUnique({
-          where: {
-            world_id_user_id: { world_id: world.id, user_id: ctx.actorUserId },
-          },
-        })
-      : null;
-    const privileged = ctx.permissions.includes('*');
-    if (
-      world.visibility === 'private' &&
-      !privileged &&
-      !(membership?.is_active)
-    )
-      throw new DomainError('WORLD_ACCESS_DENIED', 'World access denied', 403);
+  private membership(world: World, userId: string) {
+    return this.state.memberships.find(
+      (membership) =>
+        membership.world_id === world.id && membership.user_id === userId && membership.is_active,
+    );
+  }
 
+  private canRead(ctx: WorldsExecutionContext, world: World) {
+    return (
+      world.visibility === 'organization' ||
+      ctx.permissions.includes('*') ||
+      ctx.permissions.includes('worlds:manage') ||
+      Boolean(this.membership(world, ctx.userId))
+    );
+  }
+
+  private canManage(ctx: WorldsExecutionContext, world: World) {
+    if (ctx.permissions.includes('*') || ctx.permissions.includes('worlds:manage')) return true;
+    const membership = this.membership(world, ctx.userId);
+    return Boolean(membership && MANAGE_ROLES.has(membership.role));
+  }
+
+  private view(ctx: WorldsExecutionContext, world: World, detail = false) {
+    const releases = this.state.releases
+      .filter((release) => release.world_id === world.id)
+      .sort((a, b) => b.release_number - a.release_number);
+    const current = releases.find((release) => release.id === world.current_release_id) ?? null;
+    const role = this.membership(world, ctx.userId)?.role ?? null;
     return {
-      worldId: world.id,
-      worldKey: world.key,
-      worldTitle: world.title,
-      worldReleaseId: world.current_release.id,
-      worldReleaseNumber: world.current_release.release_number,
-      worldRole: membership?.is_active ? membership.role : undefined,
-      worldStatus: world.status,
+      ...world,
+      role,
+      current_release: current,
+      counts: {
+        tasks: 0,
+        cases: 0,
+        signals: 0,
+        memberships: this.state.memberships.filter((membership) => membership.world_id === world.id).length,
+      },
+      ...(detail ? { releases } : {}),
     };
   }
 
-  private async requireManage(ctx: ExecutionContext, worldId?: string) {
-    if (ctx.permissions.includes('*')) return;
-    // Creating a World is an organization-level capability. Once a World exists,
-    // its owner/maintainer may administer it without being made a global Worlds admin.
-    if (!worldId) {
-      requirePermission(ctx, 'worlds:manage');
-      return;
-    }
-    if (ctx.permissions.includes('worlds:manage')) return;
-    if (!ctx.actorUserId)
-      throw new DomainError('WORLD_MANAGE_DENIED', 'World management denied', 403);
-    const membership = await this.db.worldMembership.findUnique({
-      where: { world_id_user_id: { world_id: worldId, user_id: ctx.actorUserId } },
-    });
-    if (!membership?.is_active || !MANAGE_ROLES.has(membership.role))
-      throw new DomainError('WORLD_MANAGE_DENIED', 'World management denied', 403);
+  list(ctx: WorldsExecutionContext) {
+    return this.state.worlds
+      .filter((world) => world.organization_id === ctx.organizationId && this.canRead(ctx, world))
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map((world) => this.view(ctx, world));
   }
 
-  async list(ctx: ExecutionContext) {
-    const worlds = await this.db.world.findMany({
-      where: {
-        organization_id: ctx.organizationId,
-        ...(ctx.permissions.includes('*')
-          ? {}
-          : {
-              OR: [
-                { visibility: 'organization' as const },
-                ...(ctx.actorUserId
-                  ? [{ memberships: { some: { user_id: ctx.actorUserId, is_active: true } } }]
-                  : []),
-              ],
-            }),
-      },
-      include: {
-        current_release: true,
-        memberships: {
-          where: {
-            user_id: ctx.actorUserId ?? '00000000-0000-0000-0000-000000000000',
-            is_active: true,
-          },
-          take: 1,
-        },
-        _count: { select: { tasks: true, cases: true, signals: true } },
-      },
-      orderBy: [{ is_default: 'desc' }, { title: 'asc' }],
-    });
-    return worlds.map((world) => ({
-      id: world.id,
-      key: world.key,
-      title: world.title,
-      description: world.description,
-      status: world.status,
-      visibility: world.visibility,
-      is_default: world.is_default,
-      current_release: world.current_release,
-      role: world.memberships[0]?.role ?? null,
-      counts: world._count,
-    }));
-  }
-
-  async get(ctx: ExecutionContext, key: string) {
-    const runtime = await this.resolve(ctx, key, true);
-    const world = await this.db.world.findUniqueOrThrow({
-      where: { id: runtime.worldId },
-      include: {
-        current_release: true,
-        releases: { orderBy: { release_number: 'desc' } },
-        _count: { select: { tasks: true, cases: true, signals: true, memberships: true } },
-      },
-    });
-    return { ...world, role: runtime.worldRole ?? null, runtime, counts: world._count };
-  }
-
-  async create(
-    ctx: ExecutionContext,
+  create(
+    ctx: WorldsExecutionContext,
     input: { key: string; title: string; description?: string; visibility?: 'organization' | 'private' },
   ) {
-    await this.requireManage(ctx);
-    return this.db.$transaction(async (tx) => {
-      const world = await tx.world.create({
-        data: {
-          organization_id: ctx.organizationId,
-          key: input.key,
-          title: input.title,
-          description: input.description ?? '',
-          visibility: input.visibility ?? 'private',
-          created_by_user_id: ctx.actorUserId,
-        },
-      });
-      const release = await tx.worldRelease.create({
-        data: {
-          organization_id: ctx.organizationId,
-          world_id: world.id,
-          release_number: 1,
-          status: 'current',
-          label: 'Initial',
-          config: {},
-          content_hash: hash({ world: world.key, release: 1, config: {} }),
-          created_by_user_id: ctx.actorUserId,
-          promoted_at: new Date(),
-        },
-      });
-      await tx.world.update({
-        where: { id: world.id },
-        data: { current_release_id: release.id },
-      });
-      if (ctx.actorUserId)
-        await tx.worldMembership.create({
-          data: {
-            organization_id: ctx.organizationId,
-            world_id: world.id,
-            user_id: ctx.actorUserId,
-            role: 'owner',
-          },
-        });
-      await this.audit(tx, ctx, world.id, 'WorldCreated', { key: world.key }, release.id);
-      return tx.world.findUniqueOrThrow({
-        where: { id: world.id },
-        include: { current_release: true },
-      });
+    requirePermission(ctx, 'worlds:manage');
+    if (this.state.worlds.some((world) => world.organization_id === ctx.organizationId && world.key === input.key))
+      throw new DomainError('WORLD_EXISTS', `World already exists: ${input.key}`, 409);
+    const worldId = randomUUID();
+    const releaseId = randomUUID();
+    const created = now();
+    const release: Release = {
+      id: releaseId,
+      world_id: worldId,
+      release_number: 1,
+      status: 'current',
+      label: 'Initial',
+      config: {},
+      content_hash: digest({ key: input.key, release: 1 }),
+      created_at: created,
+      promoted_at: created,
+    };
+    const world: World = {
+      id: worldId,
+      organization_id: ctx.organizationId,
+      key: input.key,
+      title: input.title,
+      description: input.description ?? '',
+      status: 'active',
+      visibility: input.visibility ?? 'private',
+      is_default: false,
+      current_release_id: releaseId,
+      created_at: created,
+    };
+    this.state.worlds.push(world);
+    this.state.releases.push(release);
+    this.state.memberships.push({
+      id: randomUUID(),
+      world_id: world.id,
+      user_id: ctx.userId,
+      role: 'owner',
+      is_active: true,
     });
+    this.persist();
+    return this.view(ctx, world, true);
   }
 
-  async releases(ctx: ExecutionContext, key: string) {
-    const runtime = await this.resolve(ctx, key);
-    return this.db.worldRelease.findMany({
-      where: { organization_id: ctx.organizationId, world_id: runtime.worldId },
-      orderBy: { release_number: 'desc' },
-    });
+  get(ctx: WorldsExecutionContext, key: string) {
+    return this.view(ctx, this.world(ctx, key), true);
   }
 
-  async createRelease(
-    ctx: ExecutionContext,
+  releases(ctx: WorldsExecutionContext, key: string) {
+    const world = this.world(ctx, key);
+    return this.state.releases
+      .filter((release) => release.world_id === world.id)
+      .sort((a, b) => b.release_number - a.release_number);
+  }
+
+  createRelease(
+    ctx: WorldsExecutionContext,
     key: string,
     input: { label?: string; config?: Record<string, unknown> },
   ) {
-    const runtime = await this.resolve(ctx, key);
-    await this.requireManage(ctx, runtime.worldId);
-    return this.db.$transaction(async (tx) => {
-      await lock(tx, `world-release:${runtime.worldId}`);
-      const latest = await tx.worldRelease.findFirst({
-        where: { world_id: runtime.worldId },
-        orderBy: { release_number: 'desc' },
-      });
-      const releaseNumber = (latest?.release_number ?? 0) + 1;
-      const config = input.config ?? {};
-      const release = await tx.worldRelease.create({
-        data: {
-          organization_id: ctx.organizationId,
-          world_id: runtime.worldId,
-          release_number: releaseNumber,
-          status: 'ready',
-          label: input.label ?? `Release ${releaseNumber}`,
-          config: json(config),
-          content_hash: hash({ world: key, release: releaseNumber, config }),
-          parent_release_id: runtime.worldReleaseId,
-          created_by_user_id: ctx.actorUserId,
-        },
-      });
-      await this.audit(tx, ctx, runtime.worldId, 'WorldReleaseCreated', {
-        release_number: releaseNumber,
-        content_hash: release.content_hash,
-      }, release.id);
-      return release;
-    });
+    const world = this.world(ctx, key);
+    if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    if (world.status === 'archived') throw new DomainError('WORLD_ARCHIVED', 'Archived World is immutable', 409);
+    const current = this.state.releases.filter((release) => release.world_id === world.id);
+    const number = Math.max(0, ...current.map((release) => release.release_number)) + 1;
+    const config = input.config ?? {};
+    const release: Release = {
+      id: randomUUID(),
+      world_id: world.id,
+      release_number: number,
+      status: 'ready',
+      label: input.label?.trim() || `Release ${number}`,
+      config,
+      content_hash: digest({ world: world.key, release: number, config }),
+      created_at: now(),
+      promoted_at: null,
+    };
+    this.state.releases.push(release);
+    this.persist();
+    return release;
   }
 
-  async promote(ctx: ExecutionContext, key: string, releaseId: string) {
-    const runtime = await this.resolve(ctx, key);
-    await this.requireManage(ctx, runtime.worldId);
-    return this.db.$transaction(async (tx) => {
-      await lock(tx, `world-release:${runtime.worldId}`);
-      const target = await tx.worldRelease.findFirst({
-        where: {
-          id: releaseId,
-          organization_id: ctx.organizationId,
-          world_id: runtime.worldId,
-        },
-      });
-      if (!target)
-        throw new DomainError('WORLD_RELEASE_NOT_FOUND', 'World release not found', 404);
-      if (!['ready', 'current'].includes(target.status))
-        throw new DomainError('WORLD_RELEASE_NOT_READY', 'Release is not promotable', 409);
-      if (target.status !== 'current') {
-        await tx.worldRelease.updateMany({
-          where: { world_id: runtime.worldId, status: 'current' },
-          data: { status: 'ready' },
-        });
-        await tx.worldRelease.update({
-          where: { id: target.id },
-          data: { status: 'current', promoted_at: new Date() },
-        });
-        await tx.world.update({
-          where: { id: runtime.worldId },
-          data: { current_release_id: target.id },
-        });
-      }
-      await this.audit(tx, ctx, runtime.worldId, 'WorldReleasePromoted', {
-        release_number: target.release_number,
-      }, target.id);
-      return tx.worldRelease.findUniqueOrThrow({ where: { id: target.id } });
-    });
+  promote(ctx: WorldsExecutionContext, key: string, releaseId: string) {
+    const world = this.world(ctx, key);
+    if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    const target = this.state.releases.find(
+      (release) => release.id === releaseId && release.world_id === world.id,
+    );
+    if (!target) throw new DomainError('RELEASE_NOT_FOUND', 'Release not found', 404);
+    if (target.status === 'archived') throw new DomainError('RELEASE_ARCHIVED', 'Archived release cannot be promoted', 409);
+    for (const release of this.state.releases.filter((item) => item.world_id === world.id)) {
+      if (release.status === 'current') release.status = 'frozen';
+    }
+    target.status = 'current';
+    target.promoted_at = now();
+    world.current_release_id = target.id;
+    this.persist();
+    return target;
   }
 
-  async memberships(ctx: ExecutionContext, key: string) {
-    const runtime = await this.resolve(ctx, key);
-    await this.requireManage(ctx, runtime.worldId);
-    return this.db.worldMembership.findMany({
-      where: { world_id: runtime.worldId },
-      include: { user: { select: { id: true, email: true, display_name: true, status: true } } },
-      orderBy: { created_at: 'asc' },
-    });
+  memberships(ctx: WorldsExecutionContext, key: string) {
+    const world = this.world(ctx, key);
+    if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    return this.state.memberships.filter((membership) => membership.world_id === world.id);
   }
 
-  async setMembership(
-    ctx: ExecutionContext,
+  setMembership(
+    ctx: WorldsExecutionContext,
     key: string,
     userId: string,
-    input: { role: WorldMembershipRole; is_active?: boolean },
+    input: { role: WorldRole; is_active?: boolean },
   ) {
-    const runtime = await this.resolve(ctx, key);
-    await this.requireManage(ctx, runtime.worldId);
-    const user = await this.db.userAccount.findFirst({
-      where: { id: userId, organization_id: ctx.organizationId },
-    });
-    if (!user) throw new DomainError('USER_NOT_FOUND', 'User not found', 404);
-    const membership = await this.db.worldMembership.upsert({
-      where: { world_id_user_id: { world_id: runtime.worldId, user_id: userId } },
-      create: {
-        organization_id: ctx.organizationId,
-        world_id: runtime.worldId,
+    const world = this.world(ctx, key);
+    if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    let membership = this.state.memberships.find(
+      (candidate) => candidate.world_id === world.id && candidate.user_id === userId,
+    );
+    if (!membership) {
+      membership = {
+        id: randomUUID(),
+        world_id: world.id,
         user_id: userId,
         role: input.role,
         is_active: input.is_active ?? true,
-      },
-      update: { role: input.role, is_active: input.is_active ?? true },
-    });
-    await this.db.worldAuditEvent.create({
-      data: {
-        organization_id: ctx.organizationId,
-        world_id: runtime.worldId,
-        release_id: runtime.worldReleaseId,
-        actor_user_id: ctx.actorUserId,
-        action: 'WorldMembershipChanged',
-        details: { user_id: userId, role: membership.role, is_active: membership.is_active },
-      },
-    });
+      };
+      this.state.memberships.push(membership);
+    } else {
+      membership.role = input.role;
+      membership.is_active = input.is_active ?? membership.is_active;
+    }
+    this.persist();
     return membership;
   }
 
-  async archive(ctx: ExecutionContext, key: string) {
-    const runtime = await this.resolve(ctx, key);
-    await this.requireManage(ctx, runtime.worldId);
-    if (key === 'main')
-      throw new DomainError('DEFAULT_WORLD_REQUIRED', 'The main World cannot be archived', 409);
-    const world = await this.db.world.update({
-      where: { id: runtime.worldId },
-      data: { status: 'archived', archived_at: new Date() },
-    });
-    await this.db.worldAuditEvent.create({
-      data: {
-        organization_id: ctx.organizationId,
-        world_id: runtime.worldId,
-        release_id: runtime.worldReleaseId,
-        actor_user_id: ctx.actorUserId,
-        action: 'WorldArchived',
-        details: {},
+  archive(ctx: WorldsExecutionContext, key: string) {
+    const world = this.world(ctx, key);
+    if (world.is_default) throw new DomainError('WORLD_DEFAULT', 'Default World cannot be archived', 409);
+    if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    world.status = 'archived';
+    this.persist();
+    return this.view(ctx, world, true);
+  }
+
+  runtime(ctx: WorldsExecutionContext) {
+    const key = ctx.worldKey ?? 'main';
+    const world = this.world(ctx, key);
+    const current = this.state.releases.find((release) => release.id === world.current_release_id) ?? null;
+    return {
+      world: {
+        id: world.id,
+        key: world.key,
+        title: world.title,
+        role: this.membership(world, ctx.userId)?.role ?? null,
+        status: world.status,
       },
-    });
-    return world;
+      release: current
+        ? { id: current.id, number: current.release_number, label: current.label }
+        : null,
+    };
   }
 }

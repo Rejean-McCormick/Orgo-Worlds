@@ -1,5 +1,8 @@
-import { DeliveryError, IntegrationReceipt } from '../port';
-import type { InteractionEnvelope } from './contracts';
+import {
+  DeliveryError,
+  type IntegrationReceipt,
+  type InteractionEnvelope,
+} from './contracts';
 
 export class InteractionKernelHttpBridge {
   constructor(
@@ -35,10 +38,13 @@ export class InteractionKernelHttpBridge {
     } catch {
       throw new DeliveryError('INVALID_RECEIPT', false);
     }
+    const rawRecord = raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : null;
     const candidate =
-      typeof raw === 'object' && raw && 'data' in raw
-        ? (raw as { data?: unknown }).data
-        : raw;
+      rawRecord && typeof rawRecord.status === 'string'
+        ? rawRecord
+        : rawRecord && 'data' in rawRecord
+          ? rawRecord.data
+          : raw;
     if (!response.ok || !candidate || typeof candidate !== 'object')
       throw new DeliveryError(
         response.status >= 500 || response.status === 429

@@ -1,2 +1,0 @@
-npm install could not complete in the build environment because outbound DNS/network access is unavailable.
-Run VALIDATE_ORGO_WORLDS.ps1 on the target Windows machine to execute Prisma generate/migrate, typecheck, unit tests, integration tests and build against isolated PostgreSQL 16.

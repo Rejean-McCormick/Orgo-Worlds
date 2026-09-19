@@ -1,37 +1,31 @@
 {
   "name": "orgo-worlds",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "workspaces": [
-    "apps/api",
-    "apps/web"
-  ],
-  "engines": {
-    "node": ">=22"
-  },
+  "type": "module",
   "scripts": {
-    "build": "npm run build -w api && npm run build -w web",
-    "typecheck": "npm run typecheck -w api && npm run typecheck -w web",
-    "test": "npm run test -w api",
-    "test:integration": "npm run test:integration -w api",
-    "check:architecture": "node scripts/check-architecture.mjs",
-    "dev:api": "npm run dev -w api",
-    "dev:web": "npm run dev -w web",
-    "worker": "npm run worker -w api",
-    "db:generate": "npm run db:generate -w api",
-    "db:migrate": "npm run db:migrate -w api",
-    "db:seed": "npm run db:seed -w api",
-    "test:pglite": "node scripts/test-pglite.mjs",
-    "validate:local": "node scripts/validate-local.mjs",
-    "migration:preflight": "node scripts/legacy-preflight.mjs",
-    "check:worlds": "node scripts/check-worlds.mjs"
+    "dev:api": "tsx apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts",
+    "dev:web": "next dev apps/web -p 3100",
+    "check:worlds": "node scripts/check-worlds.mjs",
+    "test:ik": "tsx --test apps/api/test/unit/interaction-kernel.test.ts",
+    "validate": "npm run check:worlds && npm run test:ik"
   },
-  "overrides": {
-    "multer": "2.3.0"
+  "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "next": "^15.5.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.8",
-    "@electric-sql/pglite-socket": "^0.2.11",
-    "prettier": "^3.6.2"
+    "@types/node": "^22.18.3",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

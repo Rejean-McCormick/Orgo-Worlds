@@ -12,7 +12,7 @@ import {
   konnaxionPublishEnvelope,
 } from '../../src/orgo/integrations/interaction-kernel/outbound';
 import { InteractionKernelHttpBridge } from '../../src/orgo/integrations/interaction-kernel/http-bridge';
-import { DeliveryError } from '../../src/orgo/integrations/port';
+import { DeliveryError } from '../../src/orgo/integrations/interaction-kernel/contracts';
 
 const decision = (extra: Record<string, unknown> = {}) => ({
   specversion: 'ik/1.1' as const,
@@ -86,7 +86,7 @@ test('World release IK decision route is explicit and fail-closed', () => {
   assert.throws(() => decisionRouteConfig.parse({ workflow_code: 'x', label: 'bad' }));
 });
 
-test('legacy Konnaxion publish operation maps to IK profile without changing domain payload', () => {
+test('Konnaxion publish operation maps to IK profile without changing domain payload', () => {
   const request = {
     operation_id: '6b8c5523-096e-4fc0-b6a9-be644240b497',
     organization_id: '60f51ca2-c845-45aa-bc7e-2c62e53dfc5a',
