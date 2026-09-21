@@ -7,8 +7,7 @@
     "dev:api": "tsx apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts",
     "dev:web": "next dev apps/web -p 3100",
     "check:worlds": "node scripts/check-worlds.mjs",
-    "test:ik": "tsx --test apps/api/test/unit/interaction-kernel.test.ts",
-    "validate": "npm run check:worlds && npm run test:ik"
+    "validate": "npm run check:worlds"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",

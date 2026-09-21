@@ -14,7 +14,6 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import 'reflect-metadata';
 import { z } from 'zod';
-import { InteractionKernelModule } from '../../../modules/interaction-kernel/interaction-kernel.module';
 import {
   contextFromHeaders,
   type HeaderBag,
@@ -132,7 +131,7 @@ export class WorldRuntimeController {
 }
 
 @Module({
-  imports: [WorldsModule, InteractionKernelModule],
+  imports: [WorldsModule],
   controllers: [WorldsController, WorldRuntimeController],
 })
 class StandaloneApiModule {}

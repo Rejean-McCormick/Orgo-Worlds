@@ -2,7 +2,17 @@ import { createHash, randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Injectable } from '@nestjs/common';
-import { DomainError } from '../../integrations/interaction-kernel/contracts';
+
+export class DomainError extends Error {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly status = 400,
+  ) {
+    super(message);
+    this.name = 'DomainError';
+  }
+}
 
 export type WorldRole = 'owner' | 'maintainer' | 'member' | 'viewer';
 

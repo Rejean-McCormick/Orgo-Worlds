@@ -1,5 +1,8 @@
 # Orgo Worlds — Canonical Specification
 
+> **Post-separation lock (2026-09-21):** this sibling repository owns only World, WorldRelease, WorldMembership and routing/provenance control-plane state. Operational Orgo state (`Signal`, `WorkflowVersion`, `Case`, `Task`, `IntegrationOperation`, Outbox) and the Interaction Kernel boundary are owned by the main `Orgo` repository. Any older section below that describes those objects as persisted by Orgo_Worlds is superseded by this lock.
+
+
 **Architecture lock : `ORGO-WORLDS-1`.**
 
 Orgo Worlds est un produit standalone dérivé du moteur Orgo. Un déploiement héberge une ou plusieurs organisations; chaque organisation héberge un ou plusieurs Worlds. Un World est la frontière opérationnelle de navigation et d'isolation. Une WorldRelease est une génération immuable de configuration/provenance, pas une copie complète des données opérationnelles.

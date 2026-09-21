@@ -1,5 +1,8 @@
 # Infrastructure scoping
 
-Orgo Worlds est autonome : base `orgo_worlds`, volume `orgo_worlds_data`, API 4100, Web 3100, PostgreSQL hôte 5434. API et worker partagent la base **de ce déploiement** uniquement.
+The standalone repository is intentionally lightweight. Its runtime state is
+`runtime/orgo-worlds-state.json` unless a future explicit control-plane storage
+backend replaces it. It does not require the main Orgo PostgreSQL/Prisma schema,
+worker, outbox or provider adapters.
 
-La séparation avec Orgo est physique au niveau du déploiement. La séparation entre Worlds du même Orgo Worlds est logique et renforcée dans les requêtes et indexes.
+Main Orgo infrastructure remains owned and operated by the `Orgo` repository.

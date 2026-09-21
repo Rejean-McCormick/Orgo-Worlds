@@ -6,12 +6,8 @@ const failures = [];
 const required = [
   'package.json',
   'apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts',
-  'apps/api/src/orgo/adapters/inbound/http/interaction-kernel.controller.ts',
   'apps/api/src/orgo/modules/worlds/worlds.module.ts',
   'apps/api/src/orgo/modules/worlds/worlds.service.ts',
-  'apps/api/src/orgo/modules/interaction-kernel/interaction-kernel.module.ts',
-  'apps/api/src/orgo/modules/interaction-kernel/interaction-kernel.service.ts',
-  'apps/api/src/orgo/integrations/interaction-kernel/contracts.ts',
   'apps/web/pages/worlds.tsx',
   'apps/web/pages/w/[world]/[[...path]].tsx',
   'apps/web/src/orgo/WorldManager.tsx',
@@ -23,8 +19,33 @@ for (const rel of required) {
   if (!fs.existsSync(path.join(root, rel))) failures.push(`missing ${rel}`);
 }
 
-const sourceFiles = required.filter((rel) => /\.(?:ts|tsx|mjs)$/.test(rel));
+const forbiddenPaths = [
+  'apps/api/src/orgo/adapters/inbound/http/interaction-kernel.controller.ts',
+  'apps/api/src/orgo/modules/interaction-kernel',
+  'apps/api/src/orgo/integrations/interaction-kernel',
+  'apps/api/src/orgo/integrations/daat',
+  'apps/api/prisma',
+  'apps/api/test/unit/interaction-kernel.test.ts',
+  'docs/Technical-Reference/INTERACTION_KERNEL.md',
+];
+for (const rel of forbiddenPaths) {
+  if (fs.existsSync(path.join(root, rel))) failures.push(`main-product artifact remains ${rel}`);
+}
+
+const sourceFiles = [];
+function collect(dir) {
+  if (!fs.existsSync(dir)) return;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const abs = path.join(dir, entry.name);
+    if (entry.isDirectory()) collect(abs);
+    else if (/\.(?:ts|tsx|mjs)$/.test(entry.name)) sourceFiles.push(path.relative(root, abs));
+  }
+}
+collect(path.join(root, 'apps/api/src'));
+collect(path.join(root, 'apps/web'));
 const forbidden = [
+  ['interaction-kernel', 'main-product Interaction Kernel dependency'],
+  ['integrations/daat', 'main-product integration adapter dependency'],
   ['../platform/', 'removed platform dependency'],
   ['/platform/', 'removed platform dependency'],
   ['../intake/', 'removed intake dependency'],

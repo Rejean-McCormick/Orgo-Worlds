@@ -28,4 +28,4 @@ Write-Host "`nORGO WORLDS = STARTED" -ForegroundColor Green
 Write-Host 'Web : http://127.0.0.1:3100/worlds'
 Write-Host 'API : http://127.0.0.1:4100/api'
 Write-Host "API PID: $($api.Id) · Web PID: $($web.Id)"
-Write-Host 'State: runtime\orgo-worlds-state.json and runtime\orgo-worlds-ik.json'
+Write-Host 'State: runtime\orgo-worlds-state.json'

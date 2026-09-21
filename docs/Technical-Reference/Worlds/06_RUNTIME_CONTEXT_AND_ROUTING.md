@@ -1,15 +1,20 @@
 # Runtime context and routing
 
-Le contexte d'exécution enrichi porte : `worldId`, `worldKey`, `worldTitle`, `worldReleaseId`, `worldReleaseNumber`, `worldRole`, `worldStatus`.
-
-Routes :
+The standalone API exposes World control/routing operations only. With the current bootstrap (`app.setGlobalPrefix("api")`), the canonical local endpoints include:
 
 ```text
-/api/v3/w/main/tasks
-/api/v3/w/atelier-nord/cases
-/api/v3/w/atelier-nord/signals
-/api/v3/w/atelier-nord/workflows
-/api/v3/w/atelier-nord/runtime
+GET  /api/control/worlds
+POST /api/control/worlds
+GET  /api/control/worlds/{world_key}
+GET  /api/control/worlds/{world_key}/releases
+POST /api/control/worlds/{world_key}/releases
+POST /api/control/worlds/{world_key}/releases/{release_id}/promote
+GET  /api/control/worlds/{world_key}/memberships
+PUT  /api/control/worlds/{world_key}/memberships/{user_id}
+POST /api/control/worlds/{world_key}/archive
+GET  /api/runtime
 ```
 
-Le contexte est résolu après authentification et avant le controller. Les services utilisent `worldScope(ctx)`; une absence de World/release produit `WORLD_CONTEXT_REQUIRED` plutôt qu'un fallback silencieux dans les écritures.
+The request context can carry organization, user, permission, World and release identifiers through the standalone header contract. It is control/routing context; it does not activate a local Signal/Case/Task engine.
+
+Operational routes such as `/tasks`, `/cases`, `/signals` and `/workflows`, plus the Interaction Kernel endpoint, belong to the main `Orgo` product.

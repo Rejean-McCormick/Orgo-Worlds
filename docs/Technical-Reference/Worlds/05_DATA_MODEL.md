@@ -1,17 +1,16 @@
 # Data model
 
-Relations centrales :
+Post-separation, this repository persists only its World control-plane model:
 
 ```text
-Organization 1 ── * World 1 ── * WorldRelease
-                      │
-                      ├── * WorldMembership * ── 1 UserAccount
-                      ├── * Signal
-                      ├── * Case
-                      ├── * Task
-                      └── * WorkflowDefinition
+Organization reference
+  └── * World
+        ├── * WorldRelease
+        └── * WorldMembership
 ```
 
-`World.current_release_id` désigne la génération active pour les nouvelles écritures. Les lignes existantes conservent leur `world_release_id`. Les releases ont un `content_hash`, un parent optionnel et un numéro monotone par World.
+The current standalone store is `runtime/orgo-worlds-state.json`. `World.current_release_id` points to the currently promoted immutable release context. Release numbers are monotone per World and each release records configuration/provenance with a content hash.
 
-La migration crée des indexes partiels garantissant un seul World par défaut par organisation et une seule release `current` par World.
+`Signal`, `WorkflowDefinition`, `WorkflowVersion`, `WorkflowInstance`, `Case`, `Task`, `WorkEvent`, `IdempotencyRecord`, `IntegrationOperation` and `OutboxMessage` are **not** part of the Orgo_Worlds data model. They are owned by the main `Orgo` repository.
+
+If a future storage backend replaces the JSON store, that is a control-plane persistence change only; it must not reintroduce the Orgo operational schema here.
