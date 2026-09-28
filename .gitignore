@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js / build output
+.next/
+out/
+build/
+dist/
+.turbo/
+
+# tests / caches
+coverage/
+.nyc_output/
+.cache/
+
+# local environment / secrets
+.env
+.env.*
+!.env.example
+
+# logs / OS
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# local helpers
+GitSink.bat
+/SmartSnap.pyw

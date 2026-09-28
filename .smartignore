@@ -1,0 +1,5 @@
+# Files intentionally kept in Git but omitted from code snapshots.
+
+# Historical separation/refactor report; useful in repository history,
+# but not required in routine code snapshots.
+SEPARATION_CLEANUP_REPORT.md
