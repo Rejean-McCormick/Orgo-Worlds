@@ -23,3 +23,8 @@ Orgo Worlds est un produit standalone dérivé du moteur Orgo. Un déploiement h
 12. `main` ne peut pas être archivé.
 13. Une seule release peut être `current` par World; un seul World peut être `is_default=true` par organisation (indexes partiels SQL).
 14. Orgo Worlds n'utilise jamais la base PostgreSQL du dépôt Orgo voisin.
+
+
+## Kristal v6 boundary
+
+Orgo_Worlds may carry World/release routing and provenance references for Kristal Standard 6.0.0 artifacts, but it MUST NOT implement `kristal.build.request`, `kristal.artifact.ready`, Da’at mapping, Kristal actionability execution, or main-Orgo Interaction Kernel admission. Those remain main Orgo / external-boundary responsibilities.

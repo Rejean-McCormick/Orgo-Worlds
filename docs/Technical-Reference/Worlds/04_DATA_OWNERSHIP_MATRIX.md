@@ -11,7 +11,7 @@
 | Case / Task | Orgo | never duplicated here |
 | IntegrationOperation / Outbox | Orgo | never duplicated here |
 | Interaction Kernel envelopes | Orgo/Konnaxion integration boundaries | Worlds may provide routing metadata only |
-| Kristal / Da'at artifacts | owning external system | reference/provenance only |
+| Kristal v6 / Da'at artifacts | owning external system | reference/provenance only |
 
 The separation cleanup intentionally removed the duplicated Orgo runtime. Any
 future feature that requires operational work must call/use the main Orgo product

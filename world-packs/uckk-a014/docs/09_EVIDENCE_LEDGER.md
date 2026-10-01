@@ -178,7 +178,7 @@ Source additionnelle :
 
 ```text
 Konnaxion workflow docs
-No concrete Orgo/Kristal/SemantiK Architect workflow is implemented
+No concrete Orgo/Kristal v6/SemantiK Architect workflow is implemented
 in the current Konnaxion snapshot.
 ```
 
