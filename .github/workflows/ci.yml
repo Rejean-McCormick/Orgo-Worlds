@@ -1,0 +1,47 @@
+name: Orgo Worlds Boundary CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Validate standalone Worlds boundary
+        run: node scripts/check-worlds.mjs
+
+      - name: Record exact revision
+        run: |
+          mkdir -p ci-evidence
+          {
+            echo "Orgo-Worlds=$(git rev-parse HEAD)"
+            node --version
+          } | tee ci-evidence/components.txt
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: orgo-worlds-boundary-${{ github.sha }}
+          retention-days: 30
+          if-no-files-found: error
+          path: ci-evidence/components.txt
