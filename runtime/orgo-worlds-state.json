@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "worlds": [
+    {
+      "id": "3495f11e-d1a5-4c59-aaa0-03d3bf646107",
+      "organization_id": "local",
+      "key": "main",
+      "title": "Main World",
+      "description": "Standalone Orgo Worlds control plane.",
+      "status": "active",
+      "visibility": "organization",
+      "is_default": true,
+      "current_release_id": "9f212333-b199-4d79-88d6-17a51e89c100",
+      "created_at": "2026-10-05T23:30:18.913Z"
+    }
+  ],
+  "releases": [
+    {
+      "id": "9f212333-b199-4d79-88d6-17a51e89c100",
+      "world_id": "3495f11e-d1a5-4c59-aaa0-03d3bf646107",
+      "release_number": 1,
+      "status": "current",
+      "label": "Initial",
+      "config": {},
+      "content_hash": "f1df5f41e772f8ecc5b0ca5cdf3d1e84b79524215a78393ab6f4ba834088866c",
+      "created_at": "2026-10-05T23:30:18.913Z",
+      "promoted_at": "2026-10-05T23:30:18.913Z"
+    }
+  ],
+  "memberships": [
+    {
+      "id": "487cd37f-7ef8-4954-85d7-8fed077ad0db",
+      "world_id": "3495f11e-d1a5-4c59-aaa0-03d3bf646107",
+      "user_id": "00000000-0000-4000-8000-000000000001",
+      "role": "owner",
+      "is_active": true
+    }
+  ]
+}

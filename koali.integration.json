@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "productId": "orgo_worlds",
+  "owner": "Orgo Worlds — World context service",
+  "variables": {
+    "apiPort": {
+      "type": "port",
+      "env": "KOALI_ORGO_WORLDS_API_PORT",
+      "default": 4100
+    }
+  },
+  "surface": {
+    "mode": "headless"
+  },
+  "processes": [
+    {
+      "id": "api",
+      "cwd": ".",
+      "command": "npm",
+      "shell": {
+        "win32": true,
+        "default": false
+      },
+      "args": [
+        "run",
+        "dev:api"
+      ],
+      "env": {
+        "ORGO_WORLDS_API_PORT": "${apiPort}"
+      },
+      "probeId": "api"
+    }
+  ],
+  "probes": [
+    {
+      "id": "api",
+      "url": "http://127.0.0.1:${apiPort}/api/runtime",
+      "required": true,
+      "statuses": [
+        200
+      ],
+      "timeoutMs": 2500
+    }
+  ]
+}

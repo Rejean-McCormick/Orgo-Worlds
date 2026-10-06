@@ -5,7 +5,6 @@ const root = path.resolve(import.meta.dirname, '..');
 const failures = [];
 const required = [
   'package.json',
-  'apps/api/tsconfig.json',
   'apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts',
   'apps/api/src/orgo/modules/worlds/worlds.module.ts',
   'apps/api/src/orgo/modules/worlds/worlds.service.ts',
@@ -34,22 +33,9 @@ for (const rel of forbiddenPaths) {
 }
 
 const sourceFiles = [];
-const ignoredSourceDirs = new Set([
-  '.next',
-  'node_modules',
-  'out',
-  'build',
-  'dist',
-  '.turbo',
-  'coverage',
-  '.cache',
-]);
-
 function collect(dir) {
   if (!fs.existsSync(dir)) return;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.isDirectory() && ignoredSourceDirs.has(entry.name)) continue;
-
     const abs = path.join(dir, entry.name);
     if (entry.isDirectory()) collect(abs);
     else if (/\.(?:ts|tsx|mjs)$/.test(entry.name)) sourceFiles.push(path.relative(root, abs));
@@ -81,9 +67,6 @@ for (const rel of sourceFiles) {
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 if (packageJson.name !== 'orgo-worlds') failures.push('package.json: name must be orgo-worlds');
 if (!packageJson.scripts?.['dev:api']) failures.push('package.json: dev:api script missing');
-if (!packageJson.scripts?.['dev:api']?.includes('--tsconfig apps/api/tsconfig.json')) {
-  failures.push('package.json: dev:api must use apps/api/tsconfig.json so Nest decorators are enabled');
-}
 if (!packageJson.scripts?.['dev:web']) failures.push('package.json: dev:web script missing');
 
 const worldsService = fs.readFileSync(
