@@ -140,8 +140,9 @@ async function bootstrap() {
   const app = await NestFactory.create(StandaloneApiModule, { cors: true });
   app.setGlobalPrefix('api');
   const port = Number(process.env.ORGO_WORLDS_API_PORT ?? 4100);
-  await app.listen(port, '127.0.0.1');
-  console.log(`Orgo Worlds API listening on http://127.0.0.1:${port}/api`);
+  const host = process.env.ORGO_WORLDS_API_HOST ?? '127.0.0.1';
+  await app.listen(port, host);
+  console.log(`Orgo Worlds API listening on http://${host}:${port}/api`);
 }
 
 const entry = process.argv[1] ? path.resolve(process.argv[1]) : '';
