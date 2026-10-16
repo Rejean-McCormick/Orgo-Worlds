@@ -1,0 +1,35 @@
+format: orgo.world.pack.v1
+world:
+  key: fakeplant
+  title: FakePlant — opérations industrielles (simulation)
+  release: 1.0.0
+  synthetic: true
+target:
+  product: Orgo
+  injector_schema: orgo.scenario.v1
+  organization_key: fakeplant
+  write_boundary: Orgo/tools/scenario-injector only
+checkpoint_order:
+- FP-S01
+- FP-S02
+- FP-S03
+- FP-S04
+- FP-S05
+- FP-S06
+- FP-S07
+- FP-S08
+- FP-S09
+- FP-S10
+- FP-S11
+- FP-S12
+- FP-S13
+- FP-S14
+- FP-S15
+- FP-S16
+- FP-S17
+- FP-S18
+identifiers:
+  demo_id: fakeplant-e2e-demo
+  source_ref: urn:kristal:state:fakeplant-organisation
+  correlation_prefix: corr.fakeplant
+  organization_slug: fakeplant

@@ -1,0 +1,55 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "fakeplant-fp-s14-seed-v1",
+    "title": "FP-S14 — Portes ouvertes : petite coordination, vraie participation",
+    "description": "Scénario de travail fictif : toute commande, engagement ou écriture externe exige une approbation humaine distincte.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "corr.fakeplant.fp-s14"
+  },
+  "operations": [
+    {
+      "op": "create_case",
+      "ref": "case.fp-s14",
+      "input": {
+        "title": "FP-S14 — Portes ouvertes : petite coordination, vraie participation",
+        "description": "Scénario de travail fictif : toute commande, engagement ou écriture externe exige une approbation humaine distincte.",
+        "label": "2.11",
+        "severity": "MODERATE",
+        "visibility": "INTERNAL",
+        "metadata": {
+          "synthetic": true,
+          "source_contract": "koa.organization-state/1.0",
+          "source_state_ref": "urn:kristal:state:fakeplant-organisation",
+          "source_case_ref": "FP-CASE-14",
+          "scenario_ref": "FP-S14",
+          "authority": "manual_approval_required",
+          "fixture_only": true
+        }
+      }
+    },
+    {
+      "op": "create_task",
+      "ref": "task.fp-s14",
+      "case_ref": "case.fp-s14",
+      "input": {
+        "title": "Qualifier les preuves et l’autorisation avant toute exécution",
+        "description": "Validation manuelle requise. Ne pas exécuter automatiquement un achat, un changement ERP ou un ordre de production.",
+        "type": "fakeplant_demo_followup",
+        "category": "request",
+        "label": "2.11",
+        "priority": "MEDIUM",
+        "metadata": {
+          "synthetic": true,
+          "source_contract": "koa.organization-state/1.0",
+          "source_state_ref": "urn:kristal:state:fakeplant-organisation",
+          "source_case_ref": "FP-CASE-14",
+          "scenario_ref": "FP-S14",
+          "authority": "manual_approval_required",
+          "fixture_only": true
+        }
+      }
+    }
+  ]
+}

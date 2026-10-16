@@ -1,0 +1,142 @@
+{
+  "format": "orgo.world.pack.v1",
+  "world": {
+    "key": "fakeplant",
+    "title": "FakePlant — opérations industrielles (simulation)",
+    "description": "18 scénarios opérationnels canoniques issus du Kristal Organisation Portable v1.1",
+    "synthetic": true,
+    "release": "1.0.0"
+  },
+  "target": {
+    "product": "Orgo",
+    "injector_schema": "orgo.scenario.v1",
+    "default_api_url": "http://127.0.0.1:4000/api/v3",
+    "organization_key": "fakeplant",
+    "write_boundary": "Orgo/tools/scenario-injector only"
+  },
+  "identifiers": {
+    "demo_id": "fakeplant-e2e-demo",
+    "source_ref": "urn:kristal:state:fakeplant-organisation",
+    "correlation_prefix": "corr.fakeplant",
+    "organization_slug": "fakeplant"
+  },
+  "checkpoint_order": [
+    "FP-S01",
+    "FP-S02",
+    "FP-S03",
+    "FP-S04",
+    "FP-S05",
+    "FP-S06",
+    "FP-S07",
+    "FP-S08",
+    "FP-S09",
+    "FP-S10",
+    "FP-S11",
+    "FP-S12",
+    "FP-S13",
+    "FP-S14",
+    "FP-S15",
+    "FP-S16",
+    "FP-S17",
+    "FP-S18"
+  ],
+  "checkpoints": {
+    "FP-S01": {
+      "scenario": "scenarios/FP-S01.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S02": {
+      "scenario": "scenarios/FP-S02.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S03": {
+      "scenario": "scenarios/FP-S03.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S04": {
+      "scenario": "scenarios/FP-S04.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S05": {
+      "scenario": "scenarios/FP-S05.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S06": {
+      "scenario": "scenarios/FP-S06.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S07": {
+      "scenario": "scenarios/FP-S07.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S08": {
+      "scenario": "scenarios/FP-S08.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S09": {
+      "scenario": "scenarios/FP-S09.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S10": {
+      "scenario": "scenarios/FP-S10.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S11": {
+      "scenario": "scenarios/FP-S11.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S12": {
+      "scenario": "scenarios/FP-S12.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S13": {
+      "scenario": "scenarios/FP-S13.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S14": {
+      "scenario": "scenarios/FP-S14.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S15": {
+      "scenario": "scenarios/FP-S15.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S16": {
+      "scenario": "scenarios/FP-S16.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S17": {
+      "scenario": "scenarios/FP-S17.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    },
+    "FP-S18": {
+      "scenario": "scenarios/FP-S18.scenario.json",
+      "mutates_orgo": true,
+      "scope": "synthetic_case_and_task_only"
+    }
+  },
+  "invariants": [
+    "All fixtures synthetic; no real purchases, equipment access, HR data or ERP writes",
+    "No shared DB or direct Orgo_Worlds-to-Orgo write",
+    "Each scenario is explicitly applied by the operator; fixture presence is not a runtime import",
+    "No runtime UUID in scenario sources",
+    "Replays must use stable idempotency keys"
+  ]
+}
