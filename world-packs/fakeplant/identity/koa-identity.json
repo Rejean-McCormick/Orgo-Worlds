@@ -1,0 +1,14 @@
+{
+  "schema": "koa.tandem.identity-fixture/v1",
+  "universe_key": "fakeplant",
+  "orgo_organization_slug": "fakeplant",
+  "employee_id_authority": "fakeplant.synthetic.employee.id",
+  "employee_count": 900,
+  "login_enabled": false,
+  "orgo_auth_provider": "external_only",
+  "orgo_user_status": "disabled",
+  "shared_login_identity": "OIDC issuer + subject for real humans only",
+  "fixture_path": "fakeplant/fixture/employes.json",
+  "fixture_sha256": "2269f676feaa0aef8e775034308ccffdcbf94cc71dd619167a2c1d5b54bae662",
+  "access_boundary": "Konnaxion and Orgo roles independent; no local passwords or implied SSO for simulated people"
+}

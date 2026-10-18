@@ -8,6 +8,8 @@ for(const [name,digest] of Object.entries(manifest.sha256)){
  const raw=fs.readFileSync(path.join(root,'fakeplant/fixture',name));
  if(createHash('sha256').update(raw).digest('hex')!==digest)throw Error('bad checksum: '+name);
 }
+const identity=read('world-packs/fakeplant/identity/koa-identity.json');
+if(identity.schema!=='koa.tandem.identity-fixture/v1'||identity.universe_key!=='fakeplant'||identity.orgo_organization_slug!=='fakeplant'|| identity.fixture_sha256!==manifest.sha256['employes.json'] || identity.login_enabled!==false || identity.employee_count!==900)throw Error('bad tandem identity contract');
 const people=read('fakeplant/fixture/employes.json').employees;
 if(people.length!==900||new Set(people.map(x=>x.id)).size!==900||people.some(x=>!x.synthetic||x.login_enabled!==false))throw Error('bad people');
 const pack=read('world-packs/fakeplant/world-pack.json');
