@@ -30,6 +30,9 @@ jobs:
       - name: Validate standalone Worlds boundary
         run: node scripts/check-worlds.mjs
 
+      - name: Standalone Worlds security and isolation contracts
+        run: npm run test:tandem-standalone
+
       - name: Record exact revision
         run: |
           mkdir -p ci-evidence

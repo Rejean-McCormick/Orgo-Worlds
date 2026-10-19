@@ -332,6 +332,7 @@ export class WorldsService {
       (release) => release.id === releaseId && release.world_id === world.id,
     );
     if (!target) throw new DomainError('RELEASE_NOT_FOUND', 'Release not found', 404);
+    if (world.status === 'archived') throw new DomainError('WORLD_ARCHIVED', 'Archived World is immutable', 409);
     if (target.status === 'archived') throw new DomainError('RELEASE_ARCHIVED', 'Archived release cannot be promoted', 409);
     for (const release of this.state.releases.filter((item) => item.world_id === world.id)) {
       if (release.status === 'current') release.status = 'frozen';
@@ -357,6 +358,7 @@ export class WorldsService {
   ) {
     const world = this.world(ctx, key);
     if (!this.canManage(ctx, world)) throw new DomainError('WORLD_ACCESS_DENIED', 'World manage access denied', 403);
+    if (world.status === 'archived') throw new DomainError('WORLD_ARCHIVED', 'Archived World is immutable', 409);
     let membership = this.state.memberships.find(
       (candidate) => candidate.world_id === world.id && candidate.user_id === userId,
     );
@@ -389,7 +391,11 @@ export class WorldsService {
   runtime(ctx: WorldsExecutionContext) {
     const key = ctx.worldKey ?? 'main';
     const world = this.world(ctx, key);
+    if (world.status === 'archived') throw new DomainError('WORLD_ARCHIVED', 'Archived World is not an active runtime target', 409);
     const current = this.state.releases.find((release) => release.id === world.current_release_id) ?? null;
+    if (!current || current.world_id !== world.id || current.status !== 'current') {
+      throw new DomainError('WORLD_RELEASE_MISMATCH', 'World has no valid current release', 409);
+    }
     return {
       world: {
         id: world.id,

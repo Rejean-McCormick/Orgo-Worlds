@@ -20,6 +20,7 @@ import {
   WorldsService,
 } from '../../../modules/worlds/worlds.service';
 import { WorldsModule } from '../../../modules/worlds/worlds.module';
+import { assertSafeStandaloneBinding, assertSafeStandaloneRequest, LOCAL_WORLDS_ORIGINS } from '../../../modules/worlds/standalone-security';
 
 const keySchema = z.string().regex(/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/);
 const uuid = z.string().uuid();
@@ -137,12 +138,26 @@ export class WorldRuntimeController {
 class StandaloneApiModule {}
 
 async function bootstrap() {
-  const app = await NestFactory.create(StandaloneApiModule, { cors: true });
+  // Refuse BEFORE creating a listener or loading control-plane state.
+  const host = assertSafeStandaloneBinding(process.env);
+  const app = await NestFactory.create(StandaloneApiModule);
+  // CORS is not authentication. Restrict browser origins and, independently,
+  // reject nonlocal TCP peers and foreign Origin headers on every request.
+  app.use((req: { socket?: { remoteAddress?: string }; headers?: { origin?: string } },
+           res: { status: (value: number) => { json: (value: unknown) => void } },
+           next: () => void) => {
+    try {
+      assertSafeStandaloneRequest(req.socket?.remoteAddress, req.headers?.origin);
+      next();
+    } catch {
+      res.status(403).json({ code: 'ORGO_WORLDS_LOCAL_ONLY', message: 'Standalone control plane is local-development only' });
+    }
+  });
+  app.enableCors({ origin: [...LOCAL_WORLDS_ORIGINS], credentials: false });
   app.setGlobalPrefix('api');
   const port = Number(process.env.ORGO_WORLDS_API_PORT ?? 4100);
-  const host = process.env.ORGO_WORLDS_API_HOST ?? '127.0.0.1';
   await app.listen(port, host);
-  console.log(`Orgo Worlds API listening on http://${host}:${port}/api`);
+  console.log(`Orgo Worlds DEV API (untrusted headers) at http://${host}:${port}/api`);
 }
 
 const entry = process.argv[1] ? path.resolve(process.argv[1]) : '';

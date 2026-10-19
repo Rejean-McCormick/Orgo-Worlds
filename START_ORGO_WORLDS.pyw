@@ -204,9 +204,9 @@ def run_static_gate(npm: str, node: str | None) -> None:
 
 def start_child(name: str, npm: str, script: str) -> subprocess.Popen:
     env = os.environ.copy()
-    # Local dev integration: allow the Orgo Docker web container to reach
-    # the standalone Worlds API through host.docker.internal.
-    env.setdefault("ORGO_WORLDS_API_HOST", "0.0.0.0")
+    # Standalone API trusts client-supplied headers. Never bind on a LAN/public
+    # interface; cross-container use requires a separately authenticated bridge.
+    env.setdefault("ORGO_WORLDS_API_HOST", "127.0.0.1")
     flags = 0
     if os.name == "nt":
         flags = CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP

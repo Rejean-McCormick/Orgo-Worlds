@@ -7,7 +7,9 @@
     "dev:api": "tsx --tsconfig apps/api/tsconfig.json apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts",
     "dev:web": "next dev apps/web -p 3100",
     "check:worlds": "node scripts/check-worlds.mjs",
-    "validate": "npm run check:worlds"
+    "validate": "npm run check:worlds && npm run test:tandem-standalone",
+    "test:tandem-standalone": "node --experimental-strip-types --test scripts/tests/tandem-worlds-security.test.mjs",
+    "test:tandem-runtime": "tsx --test apps/api/test/tandem-worlds-isolation.test.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",

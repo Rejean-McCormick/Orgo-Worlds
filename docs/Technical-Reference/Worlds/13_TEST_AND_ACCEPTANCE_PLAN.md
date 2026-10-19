@@ -11,3 +11,17 @@ Post-separation acceptance for `Orgo_Worlds` is intentionally narrower than main
 7. Static anti-drift checks fail if Interaction Kernel, intake, work, Prisma operational schema or provider adapters are copied back into this repository.
 
 End-to-end `DecisionRecord → Signal → Case/Tasks → Impact` qualification is **not** an Orgo_Worlds acceptance test. It belongs to the Konnaxion↔Orgo integration qualification at ecosystem level.
+
+
+### Tandem P1 local qualification
+
+- `npm run validate` checks the standalone architecture and the 9 Node
+  boundary tests without opening a socket or requiring PostgreSQL.
+- `npm run test:tandem-runtime` runs service-level tests when repository
+  dependencies (`tsx`, NestJS) are installed; isolated temporary JSON stores.
+- Public bind, production NODE_ENV, external origins and remote TCP peers
+  must all be refused. Never expose the standalone header-based API on VPS.
+- Cross-tenant matching World keys, revoked private access, archived World
+  writes and mismatched current releases must be refused by service tests.
+- Real main-Orgo tenant mapping, JWKS/SSO, World RBAC in a live service and
+  independent database evidence remain outside this local qualification.
