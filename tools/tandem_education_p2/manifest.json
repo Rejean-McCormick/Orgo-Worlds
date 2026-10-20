@@ -1,0 +1,57 @@
+{
+  "id": "orgo_worlds_tandem_education_p2",
+  "title": "WORLDS / TANDEM EDUCATION / P2 REVIEW ONLY",
+  "sentinel": "apps/api/src/orgo/modules/worlds/worlds.service.ts",
+  "anchors": {
+    "apps/api/src/orgo/modules/worlds/standalone-security.ts": "2892918d25746b552dee1bf606f9978299ae60bbe0c38ec08a12ea7221ef11ce",
+    "apps/api/src/orgo/modules/worlds/worlds.service.ts": "93955f88645e714da2974b93ce18f08465d2fd02669754031117bbd7cba221ed"
+  },
+  "files": [
+    {
+      "path": "scripts/tandem-education/scope-review.mjs",
+      "old": null,
+      "new": "ed3c8f7466a5544bd7a2b6927806b92daa0a82f4d55493c1835e63ff84cf79b7"
+    },
+    {
+      "path": "scripts/tandem-education/fixtures/fete-sorciere.world.synthetic.json",
+      "old": null,
+      "new": "7cd332e9ef14d8fdabe156a383c6dc6fa4c0b68f0cdc2b5d95337b57e3364360"
+    },
+    {
+      "path": "scripts/tandem-education/fixtures/fete-sorciere.intent.synthetic.json",
+      "old": null,
+      "new": "6f64daa88f85ca06d0b4a7b3ccb2883ab77abc36fd06104f1364b6e5ea21d14d"
+    },
+    {
+      "path": "scripts/tests/tandem-education-scope.test.mjs",
+      "old": null,
+      "new": "0c23eb77fb9e421fd06c6ba880b8e2d035ff6a48db1d32c00176e49b97c77dd3"
+    },
+    {
+      "path": "docs/TANDEM_EDUCATION_P2_REVIEW_ONLY.md",
+      "old": null,
+      "new": "a621a8fc1626604632b50afc5df66cfc0b4f8d13cb6faed3d549b57864c6a05c"
+    }
+  ],
+  "test_copy": [
+    "apps",
+    "scripts",
+    "package.json",
+    "Orgo_World_Manager.pyw",
+    "START_ORGO_WORLDS.pyw"
+  ],
+  "tests": [
+    [
+      "node",
+      "scripts/check-worlds.mjs"
+    ],
+    [
+      "node",
+      "--no-warnings",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/tests/tandem-worlds-security.test.mjs",
+      "scripts/tests/tandem-education-scope.test.mjs"
+    ]
+  ]
+}

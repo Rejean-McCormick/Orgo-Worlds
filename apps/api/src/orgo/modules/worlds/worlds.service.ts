@@ -127,6 +127,43 @@ export class WorldsService {
     this.state = this.load();
   }
 
+  /** P4 internal-only read of the standalone Worlds store.
+   * Not a permission grant, HTTP handler, identity source, or Konnaxion release attestation.
+   * Caller MUST derive actorUserId from a verified server session, never request headers.
+   * Deliberately exposes no participant names, personal data or other memberships.
+   */
+  readTandemEducationScopeInternal(query: Readonly<{
+    organizationId: string;
+    actorUserId: string;
+    worldId: string;
+    releaseId: string;
+  }>) {
+    if (!query || !query.organizationId || !query.actorUserId ||
+        !query.worldId || !query.releaseId) return null;
+    const world = this.state.worlds.find((candidate) =>
+      candidate.id === query.worldId && candidate.organization_id === query.organizationId);
+    if (!world) return null;
+    const release = this.state.releases.find((candidate) =>
+      candidate.id === query.releaseId && candidate.world_id === world.id);
+    if (!release) return null;
+    const membership = this.state.memberships.find((candidate) =>
+      candidate.world_id === world.id && candidate.user_id === query.actorUserId && candidate.is_active);
+    return {
+      organizationId: world.organization_id,
+      worldId: world.id,
+      releaseId: release.id,
+      currentReleaseId: world.current_release_id,
+      worldStatus: world.status,
+      releaseStatus: release.status,
+      membership: membership ? {
+        userId: membership.user_id,
+        worldId: membership.world_id,
+        active: membership.is_active,
+        role: membership.role,
+      } : null,
+    };
+  }
+
   private load(): Store {
     if (fs.existsSync(this.file)) {
       const parsed = JSON.parse(fs.readFileSync(this.file, 'utf8')) as Store;

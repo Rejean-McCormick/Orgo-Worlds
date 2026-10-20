@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {generateKeyPairSync,createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {issueP5WorldWitness} from '../tandem-education/p5-signed-world-witness.mjs';
+const intentBytes=readFileSync(new URL('../tandem-education/fixtures/fete-sorciere.intent.synthetic.json',import.meta.url));
+const intent=JSON.parse(intentBytes);const nowMs=1780000000000;
+const key=generateKeyPairSync('ed25519');
+const actor={actorType:'user',actorUserId:'44444444-4444-4444-8444-444444444444',organizationId:intent.tenant_id};
+const request={format:'akor.tandem-authority-request/1.0',mode:'synthetic',status:'AWAITING_SERVER_VERIFICATION',authority:'orgo',scenario_ref:intent.scenario_ref,workflow_ref:intent.workflow_ref,tenant_id:intent.tenant_id,world_id:intent.world_id,world_release_id:intent.world_release_id,intent_sha256:createHash('sha256').update(intentBytes).digest('hex'),task_count:11,...Object.fromEntries(['runtime_admitted','teacher_authorized','permissions_verified','world_release_verified','dispatch_allowed','may_publish_to_child'].map(x=>[x,false]))};
+const state={organizationId:intent.tenant_id,worldId:intent.world_id,releaseId:intent.world_release_id,currentReleaseId:intent.world_release_id,worldStatus:'active',releaseStatus:'current',membership:{userId:actor.actorUserId,worldId:intent.world_id,active:true,role:'member'}};
+const challenge='A'.repeat(43);
+const args=()=>({request,actor,worldsService:{readTandemEducationScopeInternal:async q=>{assert.deepEqual(q,{organizationId:intent.tenant_id,actorUserId:actor.actorUserId,worldId:intent.world_id,releaseId:intent.world_release_id});return structuredClone(state);}},signingKey:key.privateKey,keyId:'worlds-p5-test',challenge,nowMs});
+test('witness signs one strictly scoped, non-authorizing minimal Worlds record',async()=>{const w=await issueP5WorldWitness(args());assert.equal(w.algorithm,'Ed25519');assert.equal(Object.keys(w).length,5);const p=JSON.parse(Buffer.from(w.payload_b64u,'base64url'));assert.equal(p.expiresAtMs,nowMs+10000);assert.equal(p.intentSha256,request.intent_sha256);assert.equal(p.membership.userId,actor.actorUserId);assert.equal(JSON.stringify(p).includes('teacher_authorized'),false);assert.equal(JSON.stringify(p).includes('participant'),false);});
+test('World, release, membership, cross-scope and forged actor all deny',async()=>{for(const change of [{worldStatus:'archived'},{releaseStatus:'frozen'},{currentReleaseId:'00000000-0000-4000-8000-000000000009'},{membership:null},{organizationId:'00000000-0000-4000-8000-000000000009'}]){const a=args();a.worldsService.readTandemEducationScopeInternal=async()=>({...state,...change});await assert.rejects(issueP5WorldWitness(a));}const a=args();a.request={...request,teacher_authorized:true};await assert.rejects(issueP5WorldWitness(a));});
+test('missing signing key, untrusted reader or malformed challenge denies before signing',async()=>{for(const changed of [{signingKey:null},{signingKey:key.publicKey},{worldsService:null},{worldsService:{contextFromHeaders:()=>({})}},{challenge:'short'},{keyId:'../evil'}])await assert.rejects(issueP5WorldWitness({...args(),...changed}));});
+test('controller has no P5 route or signing entrypoint',()=>{const controller=readFileSync(new URL('../../apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts',import.meta.url),'utf8');assert.doesNotMatch(controller,/issueP5WorldWitness|p5-signed-world-witness/);});

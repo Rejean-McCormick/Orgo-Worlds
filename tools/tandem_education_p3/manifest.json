@@ -1,0 +1,48 @@
+{
+  "id": "orgo_worlds_tandem_education_p3",
+  "title": "ORGO_WORLDS / TANDEM EDUCATION / P3 AUTHORITY BOUNDARY",
+  "sentinel": "scripts/check-worlds.mjs",
+  "anchors": {
+    "scripts/tandem-education/scope-review.mjs": "ed3c8f7466a5544bd7a2b6927806b92daa0a82f4d55493c1835e63ff84cf79b7"
+  },
+  "files": [
+    {
+      "path": "scripts/tandem-education/authority-prerequisites.mjs",
+      "old": null,
+      "new": "399676b0425502d5018bf1c415746b09dc8a6c56cabfdd442f8c331ebf925418"
+    },
+    {
+      "path": "scripts/tests/tandem-education-authority.test.mjs",
+      "old": null,
+      "new": "b614be1b50691ed84cab839bc5d1f7e0205e67aa7722a95537d50b782cb5693f"
+    },
+    {
+      "path": "docs/TANDEM_EDUCATION_P3_WORLD_AUTHORITY.md",
+      "old": null,
+      "new": "ceca08635414c2a6aa2d535f1996218e9f39e95622ca65527844ca4e6071b1d7"
+    }
+  ],
+  "copy": [
+    "scripts",
+    "docs",
+    "package.json",
+    "apps",
+    "Orgo_World_Manager.pyw",
+    "START_ORGO_WORLDS.pyw"
+  ],
+  "tests": [
+    [
+      "node",
+      "scripts/check-worlds.mjs"
+    ],
+    [
+      "node",
+      "--no-warnings",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/tests/tandem-education-authority.test.mjs",
+      "scripts/tests/tandem-education-scope.test.mjs",
+      "scripts/tests/tandem-worlds-security.test.mjs"
+    ]
+  ]
+}
