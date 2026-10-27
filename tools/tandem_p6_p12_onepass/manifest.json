@@ -1,0 +1,52 @@
+{
+  "id": "worlds_tandem_p6_p12_onepass",
+  "title": "WORLDS / TANDEM EDUCATION / P6-P12 ONE-PASS SYNTHETIC GATE",
+  "sentinel": "scripts/tandem-education/p5-signed-world-witness.mjs",
+  "anchors": {
+    "scripts/tandem-education/p5-signed-world-witness.mjs": "ce50d012243e767aa0ed12308c7213378eaa47433fb08fd9a8ad4a65073624b8",
+    "apps/api/src/orgo/modules/worlds/worlds.service.ts": "3cfb8c7d25671ce1205f182ecb64a265552c2064ff23921211fa23c888321aaf"
+  },
+  "files": [
+    {
+      "path": "scripts/tandem-education/p6-p12-trusted-bridge.mjs",
+      "old": null,
+      "new": "48db0b304bb53876a9f93a7a787950c3f32a226453c360731b9d98aaed71b4fe"
+    },
+    {
+      "path": "scripts/tests/tandem-education-p6-p12-bridge.test.mjs",
+      "old": null,
+      "new": "76414d6a1929761412faa24b825746f1cdc5a9cff7cdbcd7bd0f3b913a74c685"
+    },
+    {
+      "path": "docs/TANDEM_EDU_P6_P12_BRIDGE_CONTRACT.md",
+      "old": null,
+      "new": "54b653fab02175d5da34493cde6f9859c569172105fe20ec3f8f2815c7b87e88"
+    }
+  ],
+  "copy": [
+    "scripts",
+    "docs",
+    "package.json",
+    "apps",
+    "Orgo_World_Manager.pyw",
+    "START_ORGO_WORLDS.pyw"
+  ],
+  "tests": [
+    [
+      "node",
+      "scripts/check-worlds.mjs"
+    ],
+    [
+      "node",
+      "--no-warnings",
+      "--experimental-strip-types",
+      "--test",
+      "scripts/tests/tandem-education-p6-p12-bridge.test.mjs",
+      "scripts/tests/tandem-education-p5-signed-witness.test.mjs",
+      "scripts/tests/tandem-education-p4-world-reader.test.mjs",
+      "scripts/tests/tandem-education-authority.test.mjs",
+      "scripts/tests/tandem-education-scope.test.mjs",
+      "scripts/tests/tandem-worlds-security.test.mjs"
+    ]
+  ]
+}
