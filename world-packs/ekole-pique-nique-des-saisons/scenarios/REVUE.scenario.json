@@ -1,0 +1,257 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "kontexte_workflow_pique_nique_des_saisons_ed6db06657",
+    "title": "SYNTHETIC review — Le pique-nique des quatre saisons",
+    "description": "Orgo creates review tasks, not student missions or conditionally unlocked clues.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "kontexte.review.pique_nique_des_saisons.ed6db06657"
+  },
+  "operations": [
+    {
+      "op": "publish_workflow",
+      "ref": "workflow.kontexte",
+      "code": "kontexte_pique_nique_des_saisons_ed6db06657",
+      "content": {
+        "rules": [
+          {
+            "id": "kontexte_synthetic_review",
+            "enabled": true,
+            "match": {
+              "source": "API",
+              "type": "kontexte_synthetic_review"
+            },
+            "actions": [
+              {
+                "type": "CREATE_CASE",
+                "input": {
+                  "title": "$signal.title",
+                  "description": "$signal.description",
+                  "label": "$signal.label",
+                  "severity": "$signal.severity",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "pending_pedagogical_review": true,
+                    "kontexte_version": "0.4.0"
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] observer-saison — scientifique",
+                  "description": "Compare des indices météorologiques fictifs et explique deux effets possibles sur l’organisation.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "observer-saison",
+                    "suggested_role": "scientifique",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] choisir-lieu — explorateur",
+                  "description": "Compare deux lieux sur une carte, la distance et les conditions d’accès.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "choisir-lieu",
+                    "suggested_role": "explorateur",
+                    "depends_on_design_only": [
+                      "observer-saison"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] liste-menu — cuisinier",
+                  "description": "Prépare un menu fictif et une solution sans aliment réel pour les contraintes d’allergie, de consentement ou d’accès.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "liste-menu",
+                    "suggested_role": "cuisinier",
+                    "depends_on_design_only": [
+                      "choisir-lieu"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] quantites — comptable",
+                  "description": "Calcule les quantités pour un groupe fictif et compare les coûts avec le budget prévu.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "quantites",
+                    "suggested_role": "comptable",
+                    "depends_on_design_only": [
+                      "liste-menu"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] station-plantes — jardinier",
+                  "description": "À l’aide de fiches, distingue plantes comestibles cultivées et plantes à ne jamais cueillir sans expert; ne fait aucune dégustation.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "station-plantes",
+                    "suggested_role": "jardinier",
+                    "depends_on_design_only": [
+                      "choisir-lieu"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] plan-repli — regisseur",
+                  "description": "Rédige un plan d’activité intérieure si le temps ou l’accès au site empêche la sortie.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "plan-repli",
+                    "suggested_role": "regisseur",
+                    "depends_on_design_only": [
+                      "quantites",
+                      "station-plantes"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] invitation — redacteur",
+                  "description": "Écris une annonce qui précise lieu fictif, moment, équipements et option intérieure.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "invitation",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "plan-repli"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] confirmation — messager",
+                  "description": "Partage l’annonce approuvée, recueille une réponse fictive et confirme que chacun a accès au plan.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "pique-nique-des-saisons",
+                    "step_id": "confirmation",
+                    "suggested_role": "messager",
+                    "depends_on_design_only": [
+                      "invitation"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "op": "create_signal",
+      "ref": "signal.kontexte",
+      "workflow_ref": "workflow.kontexte",
+      "input": {
+        "source": "api",
+        "external_reference": "kontexte:review:pique_nique_des_saisons:ed6db06657",
+        "type": "kontexte_synthetic_review",
+        "category": "request",
+        "classification": "synthetic_review_only",
+        "severity": "MINOR",
+        "label": "2.11",
+        "title": "[SYNTHETIC REVIEW] Le pique-nique des quatre saisons",
+        "description": "Review-only pilot. No real children, no private clues, no automatic learner assignment.",
+        "payload": {
+          "synthetic": true,
+          "epistemic_status": "synthetic_demo_fixture",
+          "mission_id": "pique-nique-des-saisons",
+          "contains_personal_data": false
+        }
+      }
+    },
+    {
+      "op": "wait_signal",
+      "signal_ref": "signal.kontexte",
+      "timeout_seconds": 15
+    }
+  ]
+}

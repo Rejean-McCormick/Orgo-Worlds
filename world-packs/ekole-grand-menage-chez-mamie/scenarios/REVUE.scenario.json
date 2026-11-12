@@ -1,0 +1,256 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "kontexte_workflow_grand_menage_chez_mamie_e07dd8cdcb",
+    "title": "SYNTHETIC review — Le grand ménage chez mamie",
+    "description": "Orgo creates review tasks, not student missions or conditionally unlocked clues.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "kontexte.review.grand_menage_chez_mamie.e07dd8cdcb"
+  },
+  "operations": [
+    {
+      "op": "publish_workflow",
+      "ref": "workflow.kontexte",
+      "code": "kontexte_grand_menage_chez_mamie_e07dd8cdcb",
+      "content": {
+        "rules": [
+          {
+            "id": "kontexte_synthetic_review",
+            "enabled": true,
+            "match": {
+              "source": "API",
+              "type": "kontexte_synthetic_review"
+            },
+            "actions": [
+              {
+                "type": "CREATE_CASE",
+                "input": {
+                  "title": "$signal.title",
+                  "description": "$signal.description",
+                  "label": "$signal.label",
+                  "severity": "$signal.severity",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "pending_pedagogical_review": true,
+                    "kontexte_version": "0.4.0"
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] inventaire — explorateur",
+                  "description": "Repère sur le plan fictif les objets et les quatre zones à organiser. Classe les objets dans un tableau.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "inventaire",
+                    "suggested_role": "explorateur",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] tri-securitaire — scientifique",
+                  "description": "Distingue les objets à ranger, à recycler et ceux qui nécessitent l’aide d’un adulte. Ne mélange aucun produit ménager.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "tri-securitaire",
+                    "suggested_role": "scientifique",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] plan-quatre-zones — regisseur",
+                  "description": "Avec les indices de l’inventaire et le temps disponible, propose un ordre de travail pour quatre zones; demande l’accord de Mamie.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "plan-quatre-zones",
+                    "suggested_role": "regisseur",
+                    "depends_on_design_only": [
+                      "inventaire",
+                      "tri-securitaire"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] budget — comptable",
+                  "description": "Calcule le coût de fournitures fictives, compare deux solutions et explique le reste du budget.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "budget",
+                    "suggested_role": "comptable",
+                    "depends_on_design_only": [
+                      "plan-quatre-zones"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] consignes — redacteur",
+                  "description": "Écris quatre consignes courtes et positives pour guider l’équipe.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "consignes",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "plan-quatre-zones"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] transmission — messager",
+                  "description": "Présente le plan aux partenaires; recueille une question et transmets la réponse sans parler à leur place.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "transmission",
+                    "suggested_role": "messager",
+                    "depends_on_design_only": [
+                      "consignes"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] controle-final — regisseur",
+                  "description": "Vérifie avec un partenaire quatre critères : accès dégagé, objets à leur place, tri correct, choix de Mamie respectés.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "controle-final",
+                    "suggested_role": "regisseur",
+                    "depends_on_design_only": [
+                      "budget",
+                      "transmission"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] bilan — comptable",
+                  "description": "Explique ce qui a été réussi, ce qui reste à améliorer et ce qui a demandé de l’aide.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "grand-menage-chez-mamie",
+                    "step_id": "bilan",
+                    "suggested_role": "comptable",
+                    "depends_on_design_only": [
+                      "controle-final"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "op": "create_signal",
+      "ref": "signal.kontexte",
+      "workflow_ref": "workflow.kontexte",
+      "input": {
+        "source": "api",
+        "external_reference": "kontexte:review:grand_menage_chez_mamie:e07dd8cdcb",
+        "type": "kontexte_synthetic_review",
+        "category": "request",
+        "classification": "synthetic_review_only",
+        "severity": "MINOR",
+        "label": "2.11",
+        "title": "[SYNTHETIC REVIEW] Le grand ménage chez mamie",
+        "description": "Review-only pilot. No real children, no private clues, no automatic learner assignment.",
+        "payload": {
+          "synthetic": true,
+          "epistemic_status": "synthetic_demo_fixture",
+          "mission_id": "grand-menage-chez-mamie",
+          "contains_personal_data": false
+        }
+      }
+    },
+    {
+      "op": "wait_signal",
+      "signal_ref": "signal.kontexte",
+      "timeout_seconds": 15
+    }
+  ]
+}

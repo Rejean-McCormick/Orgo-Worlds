@@ -1,0 +1,42 @@
+{
+  "format": "orgo.world.pack.v1",
+  "world": {
+    "key": "ekole-spectacle-des-histoires",
+    "title": "Ékole — Le spectacle des histoires inventées (revue seulement)",
+    "description": "Pack de revue synthétique, jamais un World scolaire autorisé.",
+    "synthetic": true,
+    "release": "review-pack-2026-11-11"
+  },
+  "target": {
+    "product": "Orgo",
+    "injector_schema": "orgo.scenario.v1",
+    "default_api_url": "http://127.0.0.1:4000/api/v3",
+    "organization_key": null,
+    "write_boundary": "Orgo/tools/scenario-injector only"
+  },
+  "source": {
+    "repo": "Kontexte",
+    "mission": "data/missions/spectacle-des-histoires.json",
+    "version": "0.1.0",
+    "sha256": "72ec13c2707a2ffc0faf182750ddac5e63137c2928a8554f67b086eaa6786ae4",
+    "task_count": 10,
+    "private_fragments_included": false
+  },
+  "checkpoint_order": [
+    "REVUE"
+  ],
+  "checkpoints": {
+    "REVUE": {
+      "scenario": "scenarios/REVUE.scenario.json",
+      "mutates_orgo": true,
+      "status": "synthetic_teacher_review_only"
+    }
+  },
+  "invariants": [
+    "No child identity or assignment",
+    "No live World runtime created",
+    "No private fragment body delivered",
+    "Only the official Orgo Scenario Injector may write Orgo",
+    "Design dependencies are not execution gates"
+  ]
+}

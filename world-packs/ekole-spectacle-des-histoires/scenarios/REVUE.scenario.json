@@ -1,0 +1,304 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "kontexte_workflow_spectacle_des_histoires_0c49b76d10",
+    "title": "SYNTHETIC review — Le spectacle des histoires inventées",
+    "description": "Orgo creates review tasks, not student missions or conditionally unlocked clues.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "kontexte.review.spectacle_des_histoires.0c49b76d10"
+  },
+  "operations": [
+    {
+      "op": "publish_workflow",
+      "ref": "workflow.kontexte",
+      "code": "kontexte_spectacle_des_histoires_0c49b76d10",
+      "content": {
+        "rules": [
+          {
+            "id": "kontexte_synthetic_review",
+            "enabled": true,
+            "match": {
+              "source": "API",
+              "type": "kontexte_synthetic_review"
+            },
+            "actions": [
+              {
+                "type": "CREATE_CASE",
+                "input": {
+                  "title": "$signal.title",
+                  "description": "$signal.description",
+                  "label": "$signal.label",
+                  "severity": "$signal.severity",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "pending_pedagogical_review": true,
+                    "kontexte_version": "0.4.0"
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] idees — ecrivain",
+                  "description": "Propose trois thèmes possibles et note des mots-clés associés à chacun.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "idees",
+                    "suggested_role": "ecrivain",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] mots-cles — redacteur",
+                  "description": "Regroupe les mots par thème, distingue les mots essentiels des détails et prépare une affiche lisible.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "mots-cles",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "idees"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] vote-theme — politicien",
+                  "description": "Anime un vote sur les thèmes, pas sur les personnes; consigne les résultats et explique le choix sans humilier la minorité.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "vote-theme",
+                    "suggested_role": "politicien",
+                    "depends_on_design_only": [
+                      "mots-cles"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] petit-livre — ecrivain",
+                  "description": "Écris une histoire courte avec début, problème et résolution; crée une page de couverture.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "petit-livre",
+                    "suggested_role": "ecrivain",
+                    "depends_on_design_only": [
+                      "vote-theme"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] distribution — metteur-en-scene",
+                  "description": "Répartis personnages, narrateur, accessoires et temps de parole de façon inclusive.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "distribution",
+                    "suggested_role": "metteur-en-scene",
+                    "depends_on_design_only": [
+                      "petit-livre"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] station-personnage — coiffeuse",
+                  "description": "À une station de jeu symbolique, présente un personnage en mimant une coiffure avec les doigts; donne au visiteur un indice de la quête.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "station-personnage",
+                    "suggested_role": "coiffeuse",
+                    "depends_on_design_only": [
+                      "distribution"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] lecture-voix — lecteur",
+                  "description": "Entraîne une scène en lisant clairement le texte avec une option de soutien ou de voix partagée.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "lecture-voix",
+                    "suggested_role": "lecteur",
+                    "depends_on_design_only": [
+                      "distribution"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] bande-son — musicien",
+                  "description": "Choisis des sons produits sans danger pour marquer le début, la tension et la conclusion.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "bande-son",
+                    "suggested_role": "musicien",
+                    "depends_on_design_only": [
+                      "distribution"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] scene — regisseur",
+                  "description": "Vérifie quatre points : espace libre, accessoires sécuritaires, ordre de passage et possibilité de participation adaptée.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "scene",
+                    "suggested_role": "regisseur",
+                    "depends_on_design_only": [
+                      "station-personnage",
+                      "lecture-voix",
+                      "bande-son"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] representer — messager",
+                  "description": "Présente le spectacle à un public invité ou fictif et recueille une rétroaction sur l’histoire, pas sur la valeur des enfants.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "spectacle-des-histoires",
+                    "step_id": "representer",
+                    "suggested_role": "messager",
+                    "depends_on_design_only": [
+                      "scene"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "op": "create_signal",
+      "ref": "signal.kontexte",
+      "workflow_ref": "workflow.kontexte",
+      "input": {
+        "source": "api",
+        "external_reference": "kontexte:review:spectacle_des_histoires:0c49b76d10",
+        "type": "kontexte_synthetic_review",
+        "category": "request",
+        "classification": "synthetic_review_only",
+        "severity": "MINOR",
+        "label": "2.11",
+        "title": "[SYNTHETIC REVIEW] Le spectacle des histoires inventées",
+        "description": "Review-only pilot. No real children, no private clues, no automatic learner assignment.",
+        "payload": {
+          "synthetic": true,
+          "epistemic_status": "synthetic_demo_fixture",
+          "mission_id": "spectacle-des-histoires",
+          "contains_personal_data": false
+        }
+      }
+    },
+    {
+      "op": "wait_signal",
+      "signal_ref": "signal.kontexte",
+      "timeout_seconds": 15
+    }
+  ]
+}

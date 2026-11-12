@@ -1,0 +1,42 @@
+{
+  "format": "orgo.world.pack.v1",
+  "world": {
+    "key": "ekole-pique-nique-des-saisons",
+    "title": "Ékole — Le pique-nique des quatre saisons (revue seulement)",
+    "description": "Pack de revue synthétique, jamais un World scolaire autorisé.",
+    "synthetic": true,
+    "release": "review-pack-2026-11-11"
+  },
+  "target": {
+    "product": "Orgo",
+    "injector_schema": "orgo.scenario.v1",
+    "default_api_url": "http://127.0.0.1:4000/api/v3",
+    "organization_key": null,
+    "write_boundary": "Orgo/tools/scenario-injector only"
+  },
+  "source": {
+    "repo": "Kontexte",
+    "mission": "data/missions/pique-nique-des-saisons.json",
+    "version": "0.1.0",
+    "sha256": "5530fdbba60da3f7d2d2e97736540a98f85d34f879f3a976fc9e987f98b46b2c",
+    "task_count": 8,
+    "private_fragments_included": false
+  },
+  "checkpoint_order": [
+    "REVUE"
+  ],
+  "checkpoints": {
+    "REVUE": {
+      "scenario": "scenarios/REVUE.scenario.json",
+      "mutates_orgo": true,
+      "status": "synthetic_teacher_review_only"
+    }
+  },
+  "invariants": [
+    "No child identity or assignment",
+    "No live World runtime created",
+    "No private fragment body delivered",
+    "Only the official Orgo Scenario Injector may write Orgo",
+    "Design dependencies are not execution gates"
+  ]
+}

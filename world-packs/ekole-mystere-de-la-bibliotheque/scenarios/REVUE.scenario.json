@@ -1,0 +1,255 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "kontexte_workflow_mystere_de_la_bibliotheque_f595eaf407",
+    "title": "SYNTHETIC review — Le mystère de la bibliothèque",
+    "description": "Orgo creates review tasks, not student missions or conditionally unlocked clues.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "kontexte.review.mystere_de_la_bibliotheque.f595eaf407"
+  },
+  "operations": [
+    {
+      "op": "publish_workflow",
+      "ref": "workflow.kontexte",
+      "code": "kontexte_mystere_de_la_bibliotheque_f595eaf407",
+      "content": {
+        "rules": [
+          {
+            "id": "kontexte_synthetic_review",
+            "enabled": true,
+            "match": {
+              "source": "API",
+              "type": "kontexte_synthetic_review"
+            },
+            "actions": [
+              {
+                "type": "CREATE_CASE",
+                "input": {
+                  "title": "$signal.title",
+                  "description": "$signal.description",
+                  "label": "$signal.label",
+                  "severity": "$signal.severity",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "pending_pedagogical_review": true,
+                    "kontexte_version": "0.4.0"
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] observer-couvertures — lecteur",
+                  "description": "Observe trois couvertures fictives et explique les indices qui permettent de prévoir leur sujet.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "observer-couvertures",
+                    "suggested_role": "lecteur",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] inventaire-livres — explorateur",
+                  "description": "Repère six titres sur le plan des étagères et crée un tableau de repérage.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "inventaire-livres",
+                    "suggested_role": "explorateur",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] mots-cles — ecrivain",
+                  "description": "Choisis deux mots-clés par histoire et défends ton choix en citant des indices du texte.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "mots-cles",
+                    "suggested_role": "ecrivain",
+                    "depends_on_design_only": [
+                      "observer-couvertures"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] index — redacteur",
+                  "description": "Propose des catégories et rédige une fiche de classement claire.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "index",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "inventaire-livres",
+                      "mots-cles"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] pret-fictif — messager",
+                  "description": "Joue le rôle de l’emprunteur : pose une question puis explique comment retrouver l’ouvrage sans partager de données personnelles.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "pret-fictif",
+                    "suggested_role": "messager",
+                    "depends_on_design_only": [
+                      "index"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] catalogue-images — photographe",
+                  "description": "Prépare des dessins ou images autorisées des couvertures inventées pour le catalogue.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "catalogue-images",
+                    "suggested_role": "photographe",
+                    "depends_on_design_only": [
+                      "pret-fictif"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] verifier-rayons — regisseur",
+                  "description": "Vérifie la cohérence des classements et la facilité de retrouver un livre par deux chemins.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "verifier-rayons",
+                    "suggested_role": "regisseur",
+                    "depends_on_design_only": [
+                      "catalogue-images"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] guide-final — redacteur",
+                  "description": "Rédige un mini-guide de recherche en quatre consignes, puis le fait essayer par un pair.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "mystere-de-la-bibliotheque",
+                    "step_id": "guide-final",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "verifier-rayons"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "op": "create_signal",
+      "ref": "signal.kontexte",
+      "workflow_ref": "workflow.kontexte",
+      "input": {
+        "source": "api",
+        "external_reference": "kontexte:review:mystere_de_la_bibliotheque:f595eaf407",
+        "type": "kontexte_synthetic_review",
+        "category": "request",
+        "classification": "synthetic_review_only",
+        "severity": "MINOR",
+        "label": "2.11",
+        "title": "[SYNTHETIC REVIEW] Le mystère de la bibliothèque",
+        "description": "Review-only pilot. No real children, no private clues, no automatic learner assignment.",
+        "payload": {
+          "synthetic": true,
+          "epistemic_status": "synthetic_demo_fixture",
+          "mission_id": "mystere-de-la-bibliotheque",
+          "contains_personal_data": false
+        }
+      }
+    },
+    {
+      "op": "wait_signal",
+      "signal_ref": "signal.kontexte",
+      "timeout_seconds": 15
+    }
+  ]
+}

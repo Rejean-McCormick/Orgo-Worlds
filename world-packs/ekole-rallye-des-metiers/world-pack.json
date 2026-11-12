@@ -1,0 +1,42 @@
+{
+  "format": "orgo.world.pack.v1",
+  "world": {
+    "key": "ekole-rallye-des-metiers",
+    "title": "Ékole — Le rallye des métiers du village (revue seulement)",
+    "description": "Pack de revue synthétique, jamais un World scolaire autorisé.",
+    "synthetic": true,
+    "release": "review-pack-2026-11-11"
+  },
+  "target": {
+    "product": "Orgo",
+    "injector_schema": "orgo.scenario.v1",
+    "default_api_url": "http://127.0.0.1:4000/api/v3",
+    "organization_key": null,
+    "write_boundary": "Orgo/tools/scenario-injector only"
+  },
+  "source": {
+    "repo": "Kontexte",
+    "mission": "data/missions/rallye-des-metiers.json",
+    "version": "0.1.0",
+    "sha256": "9062071c8a11510bc3474fa6b7c6c924ab73fcf556de3051282de37db5122e3d",
+    "task_count": 8,
+    "private_fragments_included": false
+  },
+  "checkpoint_order": [
+    "REVUE"
+  ],
+  "checkpoints": {
+    "REVUE": {
+      "scenario": "scenarios/REVUE.scenario.json",
+      "mutates_orgo": true,
+      "status": "synthetic_teacher_review_only"
+    }
+  },
+  "invariants": [
+    "No child identity or assignment",
+    "No live World runtime created",
+    "No private fragment body delivered",
+    "Only the official Orgo Scenario Injector may write Orgo",
+    "Design dependencies are not execution gates"
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "schema_version": "orgo.scenario.v1",
+  "scenario": {
+    "id": "kontexte_workflow_randonnee_a_velo_8bbf0aaac4",
+    "title": "SYNTHETIC review — La grande randonnée à vélo",
+    "description": "Orgo creates review tasks, not student missions or conditionally unlocked clues.",
+    "synthetic": true,
+    "epistemic_status": "synthetic_demo_fixture",
+    "correlation_id": "kontexte.review.randonnee_a_velo.8bbf0aaac4"
+  },
+  "operations": [
+    {
+      "op": "publish_workflow",
+      "ref": "workflow.kontexte",
+      "code": "kontexte_randonnee_a_velo_8bbf0aaac4",
+      "content": {
+        "rules": [
+          {
+            "id": "kontexte_synthetic_review",
+            "enabled": true,
+            "match": {
+              "source": "API",
+              "type": "kontexte_synthetic_review"
+            },
+            "actions": [
+              {
+                "type": "CREATE_CASE",
+                "input": {
+                  "title": "$signal.title",
+                  "description": "$signal.description",
+                  "label": "$signal.label",
+                  "severity": "$signal.severity",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "pending_pedagogical_review": true,
+                    "kontexte_version": "0.4.0"
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] lire-pneu — mecanicien",
+                  "description": "Sur un pneu ou une image fournie, repère les unités et la plage de pression inscrites; ne choisis pas une pression universelle.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "lire-pneu",
+                    "suggested_role": "mecanicien",
+                    "depends_on_design_only": [],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] air-et-valve — scientifique",
+                  "description": "Compare les lieux ou dispositifs capables de fournir de l’air; explique avec un modèle pourquoi une valve limite le retour de l’air.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "air-et-valve",
+                    "suggested_role": "scientifique",
+                    "depends_on_design_only": [
+                      "lire-pneu"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] abc-dv — mecanicien",
+                  "description": "Avec un adulte, applique la vérification ABCDV : air, bons freins et guidon, chaîne et pédalier, déclencheurs, vérification finale.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "abc-dv",
+                    "suggested_role": "mecanicien",
+                    "depends_on_design_only": [
+                      "air-et-valve"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] itineraire — explorateur",
+                  "description": "À partir du plan, calcule la distance de deux trajets et choisis un itinéraire accessible et sûr selon les consignes.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "itineraire",
+                    "suggested_role": "explorateur",
+                    "depends_on_design_only": [
+                      "abc-dv"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] message-depart — messager",
+                  "description": "Explique au groupe le point de rencontre et les règles; vérifie que chacun a compris, sans transmettre de coordonnées personnelles.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "message-depart",
+                    "suggested_role": "messager",
+                    "depends_on_design_only": [
+                      "itineraire"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] station-nature — jardinier",
+                  "description": "À une station simulée, observe une fleur et un animal à partir de fiches illustrées; justifie une identification prudente.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "station-nature",
+                    "suggested_role": "jardinier",
+                    "depends_on_design_only": [
+                      "message-depart"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] rencontre — lecteur",
+                  "description": "Lis le récit fictif d’une personne nouvellement arrivée dans la communauté. Formule deux questions respectueuses et écoute les réponses prévues.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "rencontre",
+                    "suggested_role": "lecteur",
+                    "depends_on_design_only": [
+                      "message-depart"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] glacerie — comptable",
+                  "description": "Compare les prix fictifs de cornets, calcule le total pour le groupe et vérifie la monnaie rendue; aucun achat réel requis.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "glacerie",
+                    "suggested_role": "comptable",
+                    "depends_on_design_only": [
+                      "station-nature",
+                      "rencontre"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] reportage — photographe",
+                  "description": "Documente le trajet par un croquis ou des photos d’objets autorisées; aucun visage ni lieu personnel n’est nécessaire.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "reportage",
+                    "suggested_role": "photographe",
+                    "depends_on_design_only": [
+                      "glacerie"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              },
+              {
+                "type": "CREATE_TASK",
+                "input": {
+                  "title": "[REVIEW] journal-retour — redacteur",
+                  "description": "Rédige un court bilan : vérifications, découvertes, échanges, calculs et prochaine amélioration.\nTâche de conception. Ne pas attribuer à un élève. Dépendances et information privée non activées.",
+                  "label": "$signal.label",
+                  "type": "education_pilot",
+                  "category": "request",
+                  "case_id": "$case",
+                  "priority": "LOW",
+                  "metadata": {
+                    "synthetic": true,
+                    "mission_id": "randonnee-a-velo",
+                    "step_id": "journal-retour",
+                    "suggested_role": "redacteur",
+                    "depends_on_design_only": [
+                      "reportage"
+                    ],
+                    "pending_workflow_review": true,
+                    "private_fragments_embedded": false
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "op": "create_signal",
+      "ref": "signal.kontexte",
+      "workflow_ref": "workflow.kontexte",
+      "input": {
+        "source": "api",
+        "external_reference": "kontexte:review:randonnee_a_velo:8bbf0aaac4",
+        "type": "kontexte_synthetic_review",
+        "category": "request",
+        "classification": "synthetic_review_only",
+        "severity": "MINOR",
+        "label": "2.11",
+        "title": "[SYNTHETIC REVIEW] La grande randonnée à vélo",
+        "description": "Review-only pilot. No real children, no private clues, no automatic learner assignment.",
+        "payload": {
+          "synthetic": true,
+          "epistemic_status": "synthetic_demo_fixture",
+          "mission_id": "randonnee-a-velo",
+          "contains_personal_data": false
+        }
+      }
+    },
+    {
+      "op": "wait_signal",
+      "signal_ref": "signal.kontexte",
+      "timeout_seconds": 15
+    }
+  ]
+}
