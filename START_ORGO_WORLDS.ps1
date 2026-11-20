@@ -25,7 +25,7 @@ Write-Host "`n=== Starting standalone web ===" -ForegroundColor Cyan
 $web = Start-Process -FilePath $npm.Source -ArgumentList @('run', 'dev:web') -WorkingDirectory $Root -PassThru
 
 Write-Host "`nORGO WORLDS = STARTED" -ForegroundColor Green
-Write-Host 'Web : http://127.0.0.1:3100/worlds'
-Write-Host 'API : http://127.0.0.1:4100/api'
+Write-Host 'Web : http://127.0.0.1:21112/worlds'
+Write-Host 'API : http://127.0.0.1:21113/api'
 Write-Host "API PID: $($api.Id) · Web PID: $($web.Id)"
 Write-Host 'State: runtime\orgo-worlds-state.json'

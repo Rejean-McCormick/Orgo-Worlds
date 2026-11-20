@@ -155,7 +155,7 @@ async function bootstrap() {
   });
   app.enableCors({ origin: [...LOCAL_WORLDS_ORIGINS], credentials: false });
   app.setGlobalPrefix('api');
-  const port = Number(process.env.ORGO_WORLDS_API_PORT ?? 4100);
+  const port = Number(process.env.ORGO_WORLDS_API_PORT ?? 21113);
   await app.listen(port, host);
   console.log(`Orgo Worlds DEV API (untrusted headers) at http://${host}:${port}/api`);
 }

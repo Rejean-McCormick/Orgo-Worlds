@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:api": "tsx --tsconfig apps/api/tsconfig.json apps/api/src/orgo/adapters/inbound/http/worlds.controller.ts",
-    "dev:web": "next dev apps/web -p 3100",
+    "dev:web": "next dev apps/web -p 21112",
     "check:worlds": "node scripts/check-worlds.mjs",
     "validate": "npm run check:worlds && npm run test:tandem-standalone",
     "test:tandem-standalone": "node --experimental-strip-types --test scripts/tests/tandem-worlds-security.test.mjs",

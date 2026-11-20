@@ -6,7 +6,7 @@
     "apiPort": {
       "type": "port",
       "env": "KOALI_ORGO_WORLDS_API_PORT",
-      "default": 4100
+      "default": 21113
     }
   },
   "surface": {

@@ -19,7 +19,7 @@ export class BrowserWorldsClient {
   private readonly apiBase: string;
 
   constructor(public readonly worldKey?: string) {
-    this.apiBase = (process.env.NEXT_PUBLIC_ORGO_WORLDS_API ?? 'http://127.0.0.1:4100/api').replace(/\/$/, '');
+    this.apiBase = (process.env.NEXT_PUBLIC_ORGO_WORLDS_API ?? 'http://127.0.0.1:21113/api').replace(/\/$/, '');
     this.actor = {
       id:
         process.env.NEXT_PUBLIC_ORGO_WORLDS_USER_ID ??
