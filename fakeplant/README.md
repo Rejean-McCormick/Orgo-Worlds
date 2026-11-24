@@ -6,4 +6,4 @@ La mise à jour de l'application Orgo récupère ce répertoire depuis le dépô
 
 ### Identités tandem
 
-FakePlant partage les mêmes références synthétiques avec Konnaxion; voir [docs/TANDEM_IDENTITE_KONNAXION_ORGO_V1.md](docs/TANDEM_IDENTITE_KONNAXION_ORGO_V1.md). Ce n'est **pas** un login partagé tant qu'un IdP commun n'est pas configuré et testé.
+FakePlant partage les mêmes références synthétiques avec Konnaxion; voir [docs/TANDEM_IDENTITE_KONNAXION_ORGO_V1.md](../docs/TANDEM_IDENTITE_KONNAXION_ORGO_V1.md). Ce n'est **pas** un login partagé tant qu'un IdP commun n'est pas configuré et testé.
